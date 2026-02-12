@@ -18,19 +18,19 @@ const GameConfig = {
         food: {
             name: '食物',
             icon: '🍯',
-            initial: 0,
+            initial: 10,
             precision: 0, // 小數點位數
         },
         workers: {
             name: '工蟻',
             icon: '🐜',
-            initial: 0,
+            initial: 5,
             precision: 0,
         },
         leaf: {
             name: '葉子',
             icon: '🍃',
-            initial: 0,
+            initial: 10,
             precision: 0,
         },
         water: {

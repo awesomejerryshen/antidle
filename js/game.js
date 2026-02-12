@@ -6,13 +6,13 @@
 const Game = {
     // 遊戲狀態
     state: {
-        food: 0,
-        workers: 0,
-        leaf: 0,
-        water: 0,
-        larvae: 0,
-        insect: 0,
-        totalFood: 0,
+        food: GameConfig.resources.food.initial,
+        workers: GameConfig.resources.workers.initial,
+        leaf: GameConfig.resources.leaf.initial,
+        water: GameConfig.resources.water.initial,
+        larvae: GameConfig.resources.larvae.initial,
+        insect: GameConfig.resources.insect.initial,
+        totalFood: GameConfig.resources.food.initial,
         gameTime: 0, // 遊戲時間（秒）
         lastTick: Date.now(),
     },
@@ -353,13 +353,13 @@ const Game = {
     resetGame() {
         // 重置狀態
         this.state = {
-            food: 0,
-            workers: 0,
-            leaf: 0,
-            water: 0,
-            larvae: 0,
-            insect: 0,
-            totalFood: 0,
+            food: GameConfig.resources.food.initial,
+            workers: GameConfig.resources.workers.initial,
+            leaf: GameConfig.resources.leaf.initial,
+            water: GameConfig.resources.water.initial,
+            larvae: GameConfig.resources.larvae.initial,
+            insect: GameConfig.resources.insect.initial,
+            totalFood: GameConfig.resources.food.initial,
             gameTime: 0,
             lastTick: Date.now(),
         };
