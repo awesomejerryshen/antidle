@@ -289,11 +289,18 @@ const Game = {
         // 更新遊戲時間
         this.state.gameTime += delta;
 
+        // 蟻后加成（影響收集和轉換）
+        const queenMultiplier = 1 + (this.state.queen * GameConfig.queen.productionMultiplier);
+
+        // 工蟻自動收集葉子
+        if (this.state.workers > 0) {
+            const collectRate = GameConfig.workers.collectRate * this.state.workers * queenMultiplier;
+            this.state.leaf += collectRate * delta;
+        }
+
         // 工蟻自動將葉子轉換為食物
         if (this.state.workers > 0 && this.state.leaf > 0) {
-            // 計算蟻后加成
-            const queenMultiplier = 1 + (this.state.queen * GameConfig.queen.productionMultiplier);
-            const conversionRate = GameConfig.workers.efficiency * this.state.workers * queenMultiplier;
+            const conversionRate = GameConfig.workers.conversionRate * this.state.workers * queenMultiplier;
             const amount = Math.min(this.state.leaf, conversionRate * delta);
             this.state.leaf -= amount;
             this.state.food += amount;
@@ -537,8 +544,11 @@ const Game = {
 
         // 工蟻資訊
         document.getElementById('workers-count').textContent = this.state.workers;
-        document.getElementById('workers-efficiency').textContent = GameConfig.workers.efficiency;
-        document.getElementById('workers-conversion').textContent = `${Math.round(productionEfficiency)}%`;
+        const queenMultiplier = 1 + (this.state.queen * GameConfig.queen.productionMultiplier);
+        const collectRate = GameConfig.workers.collectRate * this.state.workers * queenMultiplier;
+        const conversionRate = GameConfig.workers.conversionRate * this.state.workers * queenMultiplier;
+        document.getElementById('workers-collect-rate').textContent = collectRate.toFixed(1);
+        document.getElementById('workers-conversion-rate').textContent = conversionRate.toFixed(1);
 
         // 兵蟻資訊
         document.getElementById('soldiers-count').textContent = this.state.soldiers;
