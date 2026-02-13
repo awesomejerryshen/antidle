@@ -138,6 +138,9 @@ const Game = {
         this.showFloatingNumber(amount, '🍃', document.getElementById('collect-btn'));
         this.createParticles('leaf', document.getElementById('collect-btn'));
 
+        // 資源值動畫
+        this.animateResourceValue('leaf');
+
         Utils.log(`收集了 ${amount} 葉子`);
     },
 
@@ -166,10 +169,15 @@ const Game = {
             this.showFloatingNumber(1, '🐜', document.getElementById('buy-worker-btn'));
             this.createParticles('food', document.getElementById('buy-worker-btn'));
 
+            // 資源值動畫
+            this.animateResourceValue('workers');
+            this.animateResourceValue('food');
+
             Utils.notify(`購買了 1 隻工蟻！`, 'success');
             Utils.log(`購買了 1 隻工蟻，價格: ${price} 食物`);
         } else {
             Utils.notify(`食物不足！需要 ${price} 食物`, 'error');
+            this.shakeButton('buy-worker-btn');
         }
     },
 
@@ -285,6 +293,9 @@ const Game = {
         // 更新工蟻視覺化
         this.updateWorkersVisual();
 
+        // 更新按鈕狀態
+        this.updateButtonStates();
+
         // 更新統計
         document.getElementById('game-time').textContent = Utils.formatTime(
             Math.floor(this.state.gameTime)
@@ -297,6 +308,22 @@ const Game = {
         document.getElementById('setting-autosave').checked = GameConfig.game.autoSave;
         document.getElementById('setting-save-interval').value =
             GameConfig.game.saveInterval / 1000;
+    },
+
+    /**
+     * 更新按鈕狀態（啟用/禁用）
+     */
+    updateButtonStates() {
+        const buyWorkerBtn = document.getElementById('buy-worker-btn');
+        const workerPrice = this.getWorkerPrice();
+
+        if (this.state.food < workerPrice) {
+            buyWorkerBtn.disabled = true;
+            buyWorkerBtn.textContent = `🐜 購買工蟻 (${workerPrice} 🍯) - 食物不足`;
+        } else {
+            buyWorkerBtn.disabled = false;
+            buyWorkerBtn.textContent = `🐜 購買工蟻 (${workerPrice} 🍯)`;
+        }
     },
 
     /**
@@ -394,6 +421,34 @@ const Game = {
             moreIndicator.textContent = `+${workerCount - maxVisible}`;
             container.appendChild(moreIndicator);
         }
+    },
+
+    /**
+     * 資源值動畫
+     * @param {string} resourceId - 資源 ID
+     */
+    animateResourceValue(resourceId) {
+        const element = document.getElementById(resourceId);
+        if (!element) return;
+
+        element.classList.add('updated');
+        setTimeout(() => {
+            element.classList.remove('updated');
+        }, 300);
+    },
+
+    /**
+     * 按鈕搖晃效果（錯誤提示）
+     * @param {string} buttonId - 按鈕 ID
+     */
+    shakeButton(buttonId) {
+        const btn = document.getElementById(buttonId);
+        if (!btn) return;
+
+        btn.style.animation = 'shake 0.5s ease-in-out';
+        setTimeout(() => {
+            btn.style.animation = '';
+        }, 500);
     },
 
     /**
