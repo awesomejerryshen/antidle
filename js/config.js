@@ -7,7 +7,7 @@ const GameConfig = {
     // 遊戲基本設定
     game: {
         name: 'AntIdle',
-        version: '0.2.1',
+        version: '0.2.2',
         tickRate: 1000, // 遊戲更新頻率（毫秒）
         autoSave: true,
         saveInterval: 30000, // 自動儲存間隔（毫秒）
@@ -83,8 +83,8 @@ const GameConfig = {
     workers: {
         basePrice: 10, // 基礎價格（食物）
         priceMultiplier: 1.2, // 每次購買價格增長倍數
-        collectRate: 0.5, // 每隻工蟻每秒收集葉子數量
-        conversionRate: 0.5, // 每隻工蟻每秒轉換葉子為食物數量
+        collectRate: 1.0, // 每隻工蟻每秒收集葉子數量（更快）
+        conversionRate: 0.5, // 每隻工蟻每秒轉換葉子為食物數量（較慢）
     },
 
     // 兵蟻購買設定
