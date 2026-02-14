@@ -1043,8 +1043,6 @@ const Game = {
                 // 驗證版本，如果是舊版本則重置為初始值
                 if (parsed.version !== GameConfig.game.version) {
                     Utils.notify('檢測到舊版存檔，已重置為初始狀態', 'warning');
-                    return; // 使用初始值，不載入舊存檔
-                }
 
                 // 載入狀態，確保包含所有必要的字段
                 this.state = {
