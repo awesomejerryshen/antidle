@@ -188,8 +188,57 @@
             <!-- 升級頁面 -->
             <section id="tab-upgrades" class="tab-content">
                 <h2>升級商店</h2>
-                <div id="upgrades-list">
-                    <p>升級將在此顯示。</p>
+                <div class="room-upgrades">
+                    <!-- 儲藏室 -->
+                    <div class="room-card">
+                        <div class="room-header">
+                            <span class="room-icon">🏠</span>
+                            <h3>儲藏室</h3>
+                            <span class="room-level" id="storage-level">0</span>
+                        </div>
+                        <div class="room-info">
+                            <p>🍯 食物儲存上限：<span id="storage-capacity">0</span></p>
+                            <p>📊 使用量：<span id="storage-usage">0%</span></p>
+                            <p>📈 每級增加：+<span id="storage-bonus">50</span> 食物上限</p>
+                        </div>
+                        <div class="room-action">
+                            <button id="storage-upgrade-btn" class="action-btn">🏠 升級儲藏室 (<span id="storage-price">50</span> 🍯)</button>
+                        </div>
+                    </div>
+
+                    <!-- 育兒室 -->
+                    <div class="room-card">
+                        <div class="room-header">
+                            <span class="room-icon">🥚</span>
+                            <h3>育兒室</h3>
+                            <span class="room-level" id="nursery-level">0</span>
+                        </div>
+                        <div class="room-info">
+                            <p>⚡ 孵化速度加成：<span id="nursery-bonus">+0</span> 幼蟲/秒</p>
+                            <p>🥚 總產卵率：<span id="nursery-total-rate">0</span> 幼蟲/秒</p>
+                            <p>📈 每級增加：+0.2 幼蟲/秒</p>
+                        </div>
+                        <div class="room-action">
+                            <button id="nursery-upgrade-btn" class="action-btn">🥚 升級育兒室 (<span id="nursery-price">30</span> 🍯)</button>
+                        </div>
+                    </div>
+
+                    <!-- 真菌農場 -->
+                    <div class="room-card">
+                        <div class="room-header">
+                            <span class="room-icon">🍄</span>
+                            <h3>真菌農場</h3>
+                            <span class="room-level" id="fungus-level">0</span>
+                        </div>
+                        <div class="room-info">
+                            <p>🍯 高級食物生產：<span id="fungus-production">0</span> 食物/秒</p>
+                            <p>💧 水滴消耗：<span id="fungus-consumption">0</span> 水滴/秒</p>
+                            <p>📈 每級增加：+0.5 食物/秒，+0.1 水滴/秒</p>
+                        </div>
+                        <div class="room-action">
+                            <button id="fungus-upgrade-btn" class="action-btn">🍄 升級真菌農場 (<span id="fungus-price">80</span> 🍯)</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 

@@ -19,6 +19,11 @@ const Game = {
         gameTime: 0, // 遊戲時間（秒）
         lastTick: Date.now(),
         lastInvasion: -GameConfig.invasion.cooldown, // 上次入侵時間
+        rooms: {
+            storage: { level: 0, maxLevel: GameConfig.rooms.storage.maxLevel },
+            nursery: { level: 0, maxLevel: GameConfig.rooms.nursery.maxLevel },
+            fungus: { level: 0, maxLevel: GameConfig.rooms.fungus.maxLevel },
+        },
     },
 
     // 計時器引用
@@ -83,6 +88,22 @@ const Game = {
         document.getElementById('buy-nurse-btn').addEventListener('click', () => {
             this.buyNurse();
             this.animateButton('buy-nurse-btn');
+        });
+
+        // 房間升級按鈕
+        document.getElementById('storage-upgrade-btn').addEventListener('click', () => {
+            this.upgradeStorage();
+            this.animateButton('storage-upgrade-btn');
+        });
+
+        document.getElementById('nursery-upgrade-btn').addEventListener('click', () => {
+            this.upgradeNursery();
+            this.animateButton('nursery-upgrade-btn');
+        });
+
+        document.getElementById('fungus-upgrade-btn').addEventListener('click', () => {
+            this.upgradeFungus();
+            this.animateButton('fungus-upgrade-btn');
         });
 
         // 導航分頁切換
@@ -618,6 +639,30 @@ const Game = {
         const totalLarvaeRate = eggRate + nurseEfficiency;
         document.getElementById('total-larvae-rate').textContent = totalLarvaeRate.toFixed(1);
 
+        // 房間資訊
+        // 儲藏室：食物儲存上限
+        const storageCapacity = GameConfig.resources.food.initial + (this.state.rooms.storage.level * GameConfig.rooms.storage.capacityBonus);
+        document.getElementById('storage-level').textContent = this.state.rooms.storage.level;
+        document.getElementById('storage-capacity').textContent = Utils.formatNumber(storageCapacity);
+        const storagePercent = Math.min(100, Math.round((this.state.food / storageCapacity) * 100));
+        document.getElementById('storage-usage').textContent = `${storagePercent}%`;
+
+        // 育兒室：孵化速度加成
+        const nurseryBonus = this.state.rooms.nursery.level * GameConfig.rooms.nursery.hatchSpeedBonus;
+        const totalEggRate = eggRate + nurseryBonus;
+        document.getElementById('nursery-level').textContent = this.state.rooms.nursery.level;
+        document.getElementById('nursery-bonus').textContent = `+${nurseryBonus.toFixed(1)}`;
+        document.getElementById('nursery-total-rate').textContent = totalEggRate.toFixed(1);
+
+        // 真菌農場：生產率和水滴消耗
+        const fungusProduction = this.state.rooms.fungus.level * GameConfig.rooms.fungus.productionRate;
+        const fungusConsumption = this.state.rooms.fungus.level * GameConfig.rooms.fungus.waterConsumption;
+        document.getElementById('fungus-level').textContent = this.state.rooms.fungus.level;
+        document.getElementById('fungus-production').textContent = fungusProduction.toFixed(1);
+        document.getElementById('fungus-consumption').textContent = fungusConsumption.toFixed(1);
+        const totalFoodFromFungus = fungusProduction;
+        document.getElementById('fungus-total-food').textContent = totalFoodFromFungus.toFixed(1);
+
         // 入侵狀態
         const timeSinceLastInvasion = this.state.gameTime - this.state.lastInvasion;
         const isInvaded = timeSinceLastInvasion < 10; // 10秒內視為入侵中
@@ -646,6 +691,126 @@ const Game = {
             lastInvasion.textContent = `${Math.floor(timeSinceLastInvasion / 60)} 分鐘前`;
         } else {
             lastInvasion.textContent = `${Math.floor(timeSinceLastInvasion / 3600)} 小時前`;
+        }
+    },
+
+    /**
+     * 獲取儲藏室升級價格
+     * @returns {number} 升級價格
+     */
+    getStorageUpgradePrice() {
+        const level = this.state.rooms.storage.level;
+        return Math.floor(
+            GameConfig.rooms.storage.basePrice * Math.pow(GameConfig.rooms.storage.priceMultiplier, level)
+        );
+    },
+
+    /**
+     * 升級儲藏室
+     */
+    upgradeStorage() {
+        const price = this.getStorageUpgradePrice();
+        const maxLevel = GameConfig.rooms.storage.maxLevel;
+
+        if (this.state.food >= price && this.state.rooms.storage.level < maxLevel) {
+            this.state.food -= price;
+            this.state.rooms.storage.level += 1;
+            this.updateUI();
+
+            // 視覺效果
+            this.showFloatingNumber(1, '🏠', document.getElementById('storage-upgrade-btn'));
+            this.createParticles('food', document.getElementById('storage-upgrade-btn'));
+
+            // 資源值動畫
+            this.animateResourceValue('food');
+
+            Utils.notify(`儲藏室升級到 ${this.state.rooms.storage.level} 級！`, 'success');
+            Utils.log(`儲藏室升級，價格: ${price} 食物，新等級: ${this.state.rooms.storage.level}`);
+        } else if (this.state.rooms.storage.level >= maxLevel) {
+            Utils.notify('儲藏室已達最高等級！', 'error');
+        } else {
+            Utils.notify(`食物不足！需要 ${price} 食物`, 'error');
+            this.shakeButton('storage-upgrade-btn');
+        }
+    },
+
+    /**
+     * 獲取育兒室升級價格
+     * @returns {number} 升級價格
+     */
+    getNurseryUpgradePrice() {
+        const level = this.state.rooms.nursery.level;
+        return Math.floor(
+            GameConfig.rooms.nursery.basePrice * Math.pow(GameConfig.rooms.nursery.priceMultiplier, level)
+        );
+    },
+
+    /**
+     * 升級育兒室
+     */
+    upgradeNursery() {
+        const price = this.getNurseryUpgradePrice();
+        const maxLevel = GameConfig.rooms.nursery.maxLevel;
+
+        if (this.state.food >= price && this.state.rooms.nursery.level < maxLevel) {
+            this.state.food -= price;
+            this.state.rooms.nursery.level += 1;
+            this.updateUI();
+
+            // 視覺效果
+            this.showFloatingNumber(1, '🥚', document.getElementById('nursery-upgrade-btn'));
+            this.createParticles('food', document.getElementById('nursery-upgrade-btn'));
+
+            // 資源值動畫
+            this.animateResourceValue('food');
+
+            Utils.notify(`育兒室升級到 ${this.state.rooms.nursery.level} 級！`, 'success');
+            Utils.log(`育兒室升級，價格: ${price} 食物，新等級: ${this.state.rooms.nursery.level}`);
+        } else if (this.state.rooms.nursery.level >= maxLevel) {
+            Utils.notify('育兒室已達最高等級！', 'error');
+        } else {
+            Utils.notify(`食物不足！需要 ${price} 食物`, 'error');
+            this.shakeButton('nursery-upgrade-btn');
+        }
+    },
+
+    /**
+     * 獲取真菌農場升級價格
+     * @returns {number} 升級價格
+     */
+    getFungusUpgradePrice() {
+        const level = this.state.rooms.fungus.level;
+        return Math.floor(
+            GameConfig.rooms.fungus.basePrice * Math.pow(GameConfig.rooms.fungus.priceMultiplier, level)
+        );
+    },
+
+    /**
+     * 升級真菌農場
+     */
+    upgradeFungus() {
+        const price = this.getFungusUpgradePrice();
+        const maxLevel = GameConfig.rooms.fungus.maxLevel;
+
+        if (this.state.food >= price && this.state.rooms.fungus.level < maxLevel) {
+            this.state.food -= price;
+            this.state.rooms.fungus.level += 1;
+            this.updateUI();
+
+            // 視覺效果
+            this.showFloatingNumber(1, '🍄', document.getElementById('fungus-upgrade-btn'));
+            this.createParticles('food', document.getElementById('fungus-upgrade-btn'));
+
+            // 資源值動畫
+            this.animateResourceValue('food');
+
+            Utils.notify(`真菌農場升級到 ${this.state.rooms.fungus.level} 級！`, 'success');
+            Utils.log(`真菌農場升級，價格: ${price} 食物，新等級: ${this.state.rooms.fungus.level}`);
+        } else if (this.state.rooms.fungus.level >= maxLevel) {
+            Utils.notify('真菌農場已達最高等級！', 'error');
+        } else {
+            Utils.notify(`食物不足！需要 ${price} 食物`, 'error');
+            this.shakeButton('fungus-upgrade-btn');
         }
     },
 

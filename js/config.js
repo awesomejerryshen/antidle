@@ -112,8 +112,37 @@ const GameConfig = {
     invasion: {
         baseChance: 0.03, // 基礎入侵機率（每秒）
         baseDamage: 5, // 入侵成功造成的基礎傷害（食物）
-        baseReward: {food: 15, leaf: 5}, // 防禦成功獲得的基礎獎勵
+        baseReward: {food: 15, leaf: 5}, // 防禦成功獲得的基礎獎勵（食物、葉子）
         cooldown: 300, // 入侵冷卻時間（秒）
+    },
+
+    // 房間系統設定
+    rooms: {
+        storage: {
+            name: '儲藏室',
+            icon: '🏠',
+            basePrice: 50, // 基礎價格（食物）
+            priceMultiplier: 1.3, // 每次升級價格增長倍數
+            capacityBonus: 50, // 每級增加儲存上限（食物）
+            maxLevel: 20, // 最高等級
+        },
+        nursery: {
+            name: '育兒室',
+            icon: '🥚',
+            basePrice: 30, // 基礎價格（食物）
+            priceMultiplier: 1.25, // 每次升級價格增長倍數
+            hatchSpeedBonus: 0.2, // 每級增加孵化速度（幼蟲/秒）
+            maxLevel: 20, // 最高等級
+        },
+        fungus: {
+            name: '真菌農場',
+            icon: '🍄',
+            basePrice: 80, // 基礎價格（食物）
+            priceMultiplier: 1.4, // 每次升級價格增長倍數
+            productionRate: 0.5, // 每級產出高級食物（食物/秒）
+            waterConsumption: 0.1, // 每級消耗水滴（水滴/秒）
+            maxLevel: 20, // 最高等級
+        },
     },
 
     // 升級系統（預留）
