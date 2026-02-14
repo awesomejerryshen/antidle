@@ -409,7 +409,7 @@ const Game = {
         this.checkInvasion(delta);
 
         // 應用儲存容量限制
-        const storageCapacity = GameConfig.resources.food.initial + (this.state.rooms.storage.level * GameConfig.rooms.storage.capacityBonus);
+        const storageCapacity = GameConfig.resources.food.baseCapacity + (this.state.rooms.storage.level * GameConfig.rooms.storage.capacityBonus);
         if (this.state.food > storageCapacity) {
             this.state.food = storageCapacity;
         }
@@ -798,7 +798,7 @@ const Game = {
 
         // 房間資訊
         // 儲藏室：食物儲存上限
-        const storageCapacity = GameConfig.resources.food.initial + (this.state.rooms.storage.level * GameConfig.rooms.storage.capacityBonus);
+        const storageCapacity = GameConfig.resources.food.baseCapacity + (this.state.rooms.storage.level * GameConfig.rooms.storage.capacityBonus);
         document.getElementById('storage-level').textContent = this.state.rooms.storage.level;
         document.getElementById('storage-capacity').textContent = Utils.formatNumber(storageCapacity);
         const storagePercent = Math.min(100, Math.round((this.state.food / storageCapacity) * 100));

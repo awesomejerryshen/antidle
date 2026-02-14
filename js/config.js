@@ -19,6 +19,7 @@ const GameConfig = {
             name: '食物',
             icon: '🍯',
             initial: 10,
+            baseCapacity: 100, // 基礎儲存容量
             precision: 0, // 小數點位數
         },
         workers: {
