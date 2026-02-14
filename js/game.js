@@ -389,8 +389,28 @@ const Game = {
             this.state.larvae += careBonus;
         }
 
+        // 真菌農場生產和水滴消耗
+        if (this.state.rooms.fungus.level > 0) {
+            const fungusProduction = this.state.rooms.fungus.level * GameConfig.rooms.fungus.productionRate;
+            const fungusConsumption = this.state.rooms.fungus.level * GameConfig.rooms.fungus.waterConsumption * delta;
+
+            // 消耗水滴
+            const waterConsumed = Math.min(this.state.water, fungusConsumption);
+            this.state.water -= waterConsumed;
+
+            // 產出食物
+            this.state.food += fungusProduction * delta;
+            this.state.totalFood += fungusProduction * delta;
+        }
+
         // 入侵事件檢查
         this.checkInvasion(delta);
+
+        // 應用儲存容量限制
+        const storageCapacity = GameConfig.resources.food.initial + (this.state.rooms.storage.level * GameConfig.rooms.storage.capacityBonus);
+        if (this.state.food > storageCapacity) {
+            this.state.food = storageCapacity;
+        }
 
         this.state.lastTick = now;
         this.updateUI();
@@ -589,6 +609,46 @@ const Game = {
         } else {
             buyNurseBtn.disabled = false;
             buyNurseBtn.textContent = `👶 購買護理蟻 (${nursePrice} 🍯)`;
+        }
+
+        // 房間升級按鈕
+        const storageUpgradeBtn = document.getElementById('storage-upgrade-btn');
+        const storagePrice = this.getStorageUpgradePrice();
+        const storageMaxLevel = GameConfig.rooms.storage.maxLevel;
+
+        if (this.state.food < storagePrice || this.state.rooms.storage.level >= storageMaxLevel) {
+            storageUpgradeBtn.disabled = true;
+            const levelText = this.state.rooms.storage.level >= storageMaxLevel ? '已滿級' : `${storagePrice} 🍯`;
+            storageUpgradeBtn.textContent = `🏠 升級儲藏室 (${levelText})`;
+        } else {
+            storageUpgradeBtn.disabled = false;
+            storageUpgradeBtn.textContent = `🏠 升級儲藏室 (${storagePrice} 🍯)`;
+        }
+
+        const nurseryUpgradeBtn = document.getElementById('nursery-upgrade-btn');
+        const nurseryPrice = this.getNurseryUpgradePrice();
+        const nurseryMaxLevel = GameConfig.rooms.nursery.maxLevel;
+
+        if (this.state.food < nurseryPrice || this.state.rooms.nursery.level >= nurseryMaxLevel) {
+            nurseryUpgradeBtn.disabled = true;
+            const levelText = this.state.rooms.nursery.level >= nurseryMaxLevel ? '已滿級' : `${nurseryPrice} 🍯`;
+            nurseryUpgradeBtn.textContent = `🥚 升級育兒室 (${levelText})`;
+        } else {
+            nurseryUpgradeBtn.disabled = false;
+            nurseryUpgradeBtn.textContent = `🥚 升級育兒室 (${nurseryPrice} 🍯)`;
+        }
+
+        const fungusUpgradeBtn = document.getElementById('fungus-upgrade-btn');
+        const fungusPrice = this.getFungusUpgradePrice();
+        const fungusMaxLevel = GameConfig.rooms.fungus.maxLevel;
+
+        if (this.state.food < fungusPrice || this.state.rooms.fungus.level >= fungusMaxLevel) {
+            fungusUpgradeBtn.disabled = true;
+            const levelText = this.state.rooms.fungus.level >= fungusMaxLevel ? '已滿級' : `${fungusPrice} 🍯`;
+            fungusUpgradeBtn.textContent = `🍄 升級真菌農場 (${levelText})`;
+        } else {
+            fungusUpgradeBtn.disabled = false;
+            fungusUpgradeBtn.textContent = `🍄 升級真菌農場 (${fungusPrice} 🍯)`;
         }
     },
 
