@@ -747,3 +747,19 @@ body {
     color: var(--color-text-light);
     font-size: var(--font-size-sm);
 }
+
+/* 提示文字 */
+.hint-text {
+    text-align: center;
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+.hint-text .icon {
+    margin-right: 4px;
+}

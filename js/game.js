@@ -57,8 +57,13 @@ const Game = {
      */
     bindEvents() {
         // 收集按鈕
-        document.getElementById('collect-btn').addEventListener('click', () => {
-            this.collectLeaf();
+        document.getElementById('collect-btn').addEventListener('click', (e) => {
+            // 檢測 Shift 鍵觸發批量購買
+            if (e.shiftKey) {
+                this.bulkBuyWorkers();
+            } else {
+                this.collectLeaf();
+            }
             this.animateButton('collect-btn');
         });
 
@@ -193,6 +198,50 @@ const Game = {
         } else {
             Utils.notify(`食物不足！需要 ${price} 食物`, 'error');
             this.shakeButton('buy-worker-btn');
+        }
+    },
+
+    /**
+     * 批量購買工蟻
+     */
+    bulkBuyWorkers() {
+        const bulkAmount = GameConfig.workers.bulkBuyAmount;
+        let totalCost = 0;
+        const currentWorkers = this.state.workers;
+
+        // 計算批量購買的總價格
+        for (let i = 0; i < bulkAmount; i++) {
+            const price = Math.floor(
+                GameConfig.workers.basePrice * Math.pow(GameConfig.workers.priceMultiplier, currentWorkers + i)
+            );
+            if (this.state.food < totalCost + price) {
+                break;
+            }
+            totalCost += price;
+        }
+
+        const actualAmount = totalCost / this.getWorkerPrice() / Math.pow(GameConfig.workers.priceMultiplier, this.state.workers);
+        const affordableAmount = Math.floor(actualAmount);
+
+        if (affordableAmount > 0 && this.state.food >= totalCost) {
+            this.state.food -= totalCost;
+            this.state.workers += affordableAmount;
+            this.updateUI();
+
+            // 視覺效果
+            this.showFloatingNumber(affordableAmount, '🐜', document.getElementById('collect-btn'));
+            this.createParticles('food', document.getElementById('collect-btn'));
+
+            // 資源值動畫
+            this.animateResourceValue('workers');
+            this.animateResourceValue('food');
+
+            Utils.notify(`批量購買了 ${affordableAmount} 隻工蟻！`, 'success');
+            Utils.log(`批量購買了 ${affordableAmount} 隻工蟻，總價格: ${totalCost} 食物`);
+        } else {
+            const price = this.getWorkerPrice();
+            Utils.notify(`食物不足！需要 ${price} 食物才能購買 1 隻工蟻`, 'error');
+            this.shakeButton('collect-btn');
         }
     },
 

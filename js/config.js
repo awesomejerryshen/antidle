@@ -83,8 +83,9 @@ const GameConfig = {
     workers: {
         basePrice: 10, // 基礎價格（食物）
         priceMultiplier: 1.2, // 每次購買價格增長倍數
-        collectRate: 0.2, // 每隻工蟻每秒收集葉子數量（自動較慢）
-        conversionRate: 0.8, // 每隻工蟻每秒轉換葉子為食物數量
+        collectRate: 0.3, // 每隻工蟻每秒收集葉子數量
+        conversionRate: 0.5, // 每隻工蟻每秒轉換葉子為食物數量
+        bulkBuyAmount: 10, // 批量購買數量
     },
 
     // 兵蟻購買設定
@@ -103,13 +104,13 @@ const GameConfig = {
 
     // 蟻后設定
     queen: {
-        eggProductionRate: 0.5, // 每秒產生幼蟲數量
+        eggProductionRate: 0.3, // 每秒產生幼蟲數量
         productionMultiplier: 0.05, // 每隻蟻后提高所有生產效率（百分比）
     },
 
     // 入侵事件設定
     invasion: {
-        baseChance: 0.05, // 基礎入侵機率（每秒）
+        baseChance: 0.03, // 基礎入侵機率（每秒）
         baseDamage: 5, // 入侵成功造成的基礎傷害（食物）
         baseReward: {food: 15, leaf: 5}, // 防禦成功獲得的基礎獎勵
         cooldown: 300, // 入侵冷卻時間（秒）
