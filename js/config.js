@@ -83,14 +83,14 @@ const GameConfig = {
     workers: {
         basePrice: 10, // 基礎價格（食物）
         priceMultiplier: 1.2, // 每次購買價格增長倍數
-        collectRate: 0.3, // 每隻工蟻每秒收集葉子數量
+        collectRate: 0.5, // 每隻工蟻每秒收集葉子數量（提高以平衡轉換率）
         conversionRate: 0.5, // 每隻工蟻每秒轉換葉子為食物數量
         bulkBuyAmount: 10, // 批量購買數量
     },
 
     // 兵蟻購買設定
     soldiers: {
-        basePrice: 5, // 基礎價格（幼蟲）
+        basePrice: 10, // 基礎價格（幼蟲）- 提高以避免初期購買太快
         priceMultiplier: 1.3, // 每次購買價格增長倍數
         defensePower: 1, // 每隻兵蟻的防禦力
     },
@@ -104,7 +104,7 @@ const GameConfig = {
 
     // 蟻后設定
     queen: {
-        eggProductionRate: 0.3, // 每秒產生幼蟲數量
+        eggProductionRate: 0.1, // 每秒產生幼蟲數量（降低以減少幼蟲過多）
         productionMultiplier: 0.05, // 每隻蟻后提高所有生產效率（百分比）
     },
 
