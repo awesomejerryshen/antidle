@@ -107,6 +107,9 @@ const GameConfig = {
     queen: {
         eggProductionRate: 0.1, // 每秒產生幼蟲數量（降低以減少幼蟲過多）
         productionMultiplier: 0.05, // 每隻蟻后提高所有生產效率（百分比）
+        maxHealth: 100, // 最大健康值
+        healthDecay: 0.05, // 每秒健康值下降
+        nurseHealRate: 0.2, // 每隻護理蟻每秒恢復的健康值
     },
 
     // 入侵事件設定

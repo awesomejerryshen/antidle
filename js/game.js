@@ -26,6 +26,7 @@ const Game = {
         },
         achievements: [], // 已解鎖的成就 ID
         defenseWins: 0, // 成功防禦次數
+        queenHealth: 100, // 蟻后健康值（0-100）
     },
 
     // 計時器引用
@@ -379,9 +380,20 @@ const Game = {
             this.state.totalFood += amount;
         }
 
-        // 蟻后產卵
+        // 蟻后健康值管理
         if (this.state.queen > 0) {
-            const eggProduction = GameConfig.queen.eggProductionRate * this.state.queen * delta;
+            // 健康值自然下降
+            this.state.queenHealth = Math.max(0, this.state.queenHealth - (GameConfig.queen.healthDecay * delta));
+
+            // 護理蟻恢復健康值
+            if (this.state.nurses > 0) {
+                const healAmount = GameConfig.queen.nurseHealRate * this.state.nurses * delta;
+                this.state.queenHealth = Math.min(GameConfig.queen.maxHealth, this.state.queenHealth + healAmount);
+            }
+
+            // 蟻后產卵（受健康值影響）
+            const healthMultiplier = this.state.queenHealth / GameConfig.queen.maxHealth;
+            const eggProduction = GameConfig.queen.eggProductionRate * this.state.queen * healthMultiplier * delta;
             this.state.larvae += eggProduction;
         }
 
@@ -768,8 +780,13 @@ const Game = {
 
         // 蟻后資訊
         document.getElementById('queen-count').textContent = this.state.queen;
-        const eggRate = GameConfig.queen.eggProductionRate * this.state.queen;
+        document.getElementById('queen-health').textContent = Math.round(this.state.queenHealth);
+
+        // 產卵率受健康值影響
+        const healthMultiplier = this.state.queenHealth / GameConfig.queen.maxHealth;
+        const eggRate = GameConfig.queen.eggProductionRate * this.state.queen * healthMultiplier;
         document.getElementById('queen-egg-rate').textContent = eggRate.toFixed(1);
+
         const queenBonus = this.state.queen * GameConfig.queen.productionMultiplier * 100;
         document.getElementById('queen-bonus').textContent = queenBonus.toFixed(1);
 
@@ -1155,6 +1172,7 @@ const Game = {
                     lastTick: Date.now(),
                     achievements: parsed.state.achievements ?? [],
                     defenseWins: parsed.state.defenseWins ?? 0,
+                    queenHealth: parsed.state.queenHealth ?? GameConfig.queen.maxHealth,
                 };
 
                 // 載入配置
