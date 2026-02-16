@@ -1096,3 +1096,145 @@ body {
     margin: var(--spacing-sm) 0;
     color: var(--color-text-light);
 }
+
+/* 研究頁面樣式 */
+.research-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.current-research {
+    background-color: var(--color-bg-dark);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    margin-top: var(--spacing-lg);
+    border: 2px solid var(--color-info);
+}
+
+.current-research h3 {
+    margin-top: 0;
+    color: var(--color-info);
+}
+
+.research-info {
+    margin: var(--spacing-md) 0;
+}
+
+.research-tree {
+    margin-bottom: var(--spacing-xl);
+}
+
+.research-category {
+    margin-bottom: var(--spacing-xl);
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.category-icon {
+    font-size: var(--font-size-xxl);
+}
+
+.category-header h3 {
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.category-researches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.research-card {
+    background-color: var(--color-bg-dark);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    transition: all var(--transition-base);
+}
+
+.research-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.research-card.unlocked {
+    border-color: var(--color-success);
+    opacity: 0.8;
+}
+
+.research-card.researching {
+    border-color: var(--color-info);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(30, 144, 255, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(30, 144, 255, 0); }
+}
+
+.research-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.research-icon {
+    font-size: 2rem;
+}
+
+.research-header h4 {
+    flex: 1;
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.research-info p {
+    margin: var(--spacing-sm) 0;
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+}
+
+.research-time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-lighter);
+}
+
+.research-status {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-sm);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+.status-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-light);
+}
+
+.research-action {
+    margin-top: var(--spacing-md);
+}
+
+.research-action button {
+    width: 100%;
+}
+
+.research-bonuses {
+    background-color: var(--color-bg-dark);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+}
+
+.no-bonuses {
+    text-align: center;
+    color: var(--color-text-light);
+    font-style: italic;
+}

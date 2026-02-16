@@ -22,6 +22,7 @@
                 <button class="nav-btn active" data-tab="overview">總覽</button>
                 <button class="nav-btn" data-tab="colony">蟻群</button>
                 <button class="nav-btn" data-tab="upgrades">升級</button>
+                <button class="nav-btn" data-tab="research">研究</button>
                 <button class="nav-btn" data-tab="rebirth">重生</button>
                 <button class="nav-btn" data-tab="achievements">成就</button>
                 <button class="nav-btn" data-tab="settings">設定</button>
@@ -255,6 +256,54 @@
                 </div>
             </section>
 
+            <!-- 研究頁面 -->
+            <section id="tab-research" class="tab-content">
+                <h2>科學研究系統 🔬</h2>
+                
+                <div class="research-header">
+                    <div class="research-stats">
+                        <div class="stat-card">
+                            <span class="stat-icon">🔬</span>
+                            <span class="stat-label">研究點數</span>
+                            <span class="stat-value" id="research-points">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">📊</span>
+                            <span class="stat-label">總獲得點數</span>
+                            <span class="stat-value" id="total-research-points">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">✅</span>
+                            <span class="stat-label">已解鎖研究</span>
+                            <span class="stat-value" id="research-progress">0/0</span>
+                        </div>
+                    </div>
+
+                    <div class="current-research" id="current-research-box" style="display: none;">
+                        <h3>⏳ 當前研究</h3>
+                        <div class="research-info">
+                            <span id="current-research-name">-</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="research-progress-bar" style="width: 0%"></div>
+                            </div>
+                            <span id="research-time-remaining">-</span>
+                        </div>
+                        <button id="cancel-research-btn" class="action-btn danger">取消研究</button>
+                    </div>
+                </div>
+
+                <div class="research-tree" id="research-tree">
+                    <!-- 動態生成 -->
+                </div>
+
+                <div class="research-bonuses">
+                    <h3>當前研究加成</h3>
+                    <div id="research-bonuses-list">
+                        <!-- 動態生成 -->
+                    </div>
+                </div>
+            </section>
+
             <!-- 重生頁面 -->
             <section id="tab-rebirth" class="tab-content">
                 <h2>重生系統 ♻️</h2>
@@ -380,13 +429,14 @@
         <div id="notifications"></div>
     </div>
 
-    <!-- 載入順序：變數 → 配置 → 工具函數 → 效果 → 音效 → 工具提示 → 重生 → 遊戲核心 -->
+    <!-- 載入順序：變數 → 配置 → 工具函數 → 效果 → 音效 → 工具提示 → 重生 → 研究 → 遊戲核心 -->
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/effects.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/tooltips.js"></script>
     <script src="js/rebirth.js"></script>
+    <script src="js/research.js"></script>
     <script src="js/game.js"></script>
 </body>
 </html>

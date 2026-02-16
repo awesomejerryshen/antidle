@@ -225,6 +225,14 @@ const Game = {
             this.performRebirth();
         });
 
+        // 取消研究按鈕
+        document.getElementById('cancel-research-btn').addEventListener('click', () => {
+            if (typeof Research !== 'undefined') {
+                Research.cancelResearch();
+                this.updateResearchUI();
+            }
+        });
+
         // 頁面關閉前儲存
         window.addEventListener('beforeunload', () => {
             this.saveGame();
@@ -580,6 +588,12 @@ const Game = {
         // 更新重生預覽
         if (typeof Rebirth !== 'undefined') {
             this.updateRebirthUI();
+        }
+        
+        // 更新研究進度
+        if (typeof Research !== 'undefined') {
+            Research.updateResearchProgress(delta);
+            this.updateResearchUI();
         }
         
         // 檢查成就（每 5 秒檢查一次，避免頻繁檢查）
@@ -1433,6 +1447,201 @@ const Game = {
                 <span>等級 ${bonuses.startingResources}</span>
             </div>
         `;
+    },
+
+    /**
+     * 更新研究 UI
+     */
+    updateResearchUI() {
+        if (typeof Research === 'undefined') return;
+
+        // 更新統計
+        document.getElementById('research-points').textContent = Utils.formatNumber(Research.researchPoints);
+        document.getElementById('total-research-points').textContent = Utils.formatNumber(Research.totalResearchPoints);
+
+        const stats = Research.getStatistics();
+        document.getElementById('research-progress').textContent = `${stats.unlocked}/${stats.total}`;
+
+        // 更新當前研究
+        const currentBox = document.getElementById('current-research-box');
+        if (Research.currentResearch) {
+            currentBox.style.display = 'block';
+            const research = GameConfig.researchTree[Research.currentResearch];
+            document.getElementById('current-research-name').textContent = `${research.icon} ${research.name}`;
+            
+            const progressPercent = Research.getResearchProgressPercent();
+            document.getElementById('research-progress-bar').style.width = `${progressPercent}%`;
+            
+            const remainingTime = Research.getRemainingTime();
+            document.getElementById('research-time-remaining').textContent = `剩餘 ${remainingTime} 秒`;
+        } else {
+            currentBox.style.display = 'none';
+        }
+
+        // 更新研究樹
+        this.updateResearchTree();
+
+        // 更新研究加成
+        this.updateResearchBonuses();
+    },
+
+    /**
+     * 更新研究樹
+     */
+    updateResearchTree() {
+        const container = document.getElementById('research-tree');
+        if (!container) return;
+
+        const categories = Research.getResearchTreeByCategory();
+        container.innerHTML = '';
+
+        for (const [categoryId, category] of Object.entries(categories)) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'research-category';
+            categoryDiv.innerHTML = `
+                <div class="category-header">
+                    <span class="category-icon">${category.icon}</span>
+                    <h3>${category.name}</h3>
+                </div>
+                <div class="category-researches" id="category-${categoryId}">
+                </div>
+            `;
+
+            const researchesContainer = categoryDiv.querySelector(`#category-${categoryId}`);
+
+            for (const research of category.researches) {
+                const card = document.createElement('div');
+                card.className = 'research-card';
+                if (research.unlocked) card.classList.add('unlocked');
+                if (research.isResearching) card.classList.add('researching');
+
+                let statusText = '';
+                let buttonDisabled = false;
+                let buttonText = '';
+
+                if (research.unlocked) {
+                    statusText = '✅ 已解鎖';
+                    buttonDisabled = true;
+                    buttonText = '已完成';
+                } else if (research.isResearching) {
+                    statusText = '⏳ 研究中...';
+                    buttonDisabled = true;
+                    buttonText = '研究中';
+                } else if (!research.canResearch) {
+                    if (Research.researchPoints < research.cost) {
+                        statusText = `需要 ${research.cost} 點（點數不足）`;
+                    } else {
+                        statusText = '需要前置研究';
+                    }
+                    buttonDisabled = true;
+                    buttonText = '無法研究';
+                } else {
+                    statusText = `需要 ${research.cost} 點`;
+                    buttonText = '開始研究';
+                }
+
+                card.innerHTML = `
+                    <div class="research-header">
+                        <span class="research-icon">${research.icon}</span>
+                        <h4>${research.name}</h4>
+                    </div>
+                    <div class="research-info">
+                        <p>${research.description}</p>
+                        <p class="research-time">⏱️ 研究時間：${research.time} 秒</p>
+                    </div>
+                    <div class="research-status">
+                        <span class="status-text">${statusText}</span>
+                    </div>
+                    <div class="research-action">
+                        <button class="action-btn" data-research="${research.id}" ${buttonDisabled ? 'disabled' : ''}>
+                            ${buttonText}
+                        </button>
+                    </div>
+                `;
+
+                // 綁定事件
+                const btn = card.querySelector('button');
+                if (!buttonDisabled && !research.unlocked && !research.isResearching) {
+                    btn.addEventListener('click', () => {
+                        if (Research.startResearch(research.id)) {
+                            this.updateResearchUI();
+                        }
+                    });
+                }
+
+                researchesContainer.appendChild(card);
+            }
+
+            container.appendChild(categoryDiv);
+        }
+    },
+
+    /**
+     * 更新研究加成
+     */
+    updateResearchBonuses() {
+        const container = document.getElementById('research-bonuses-list');
+        if (!container) return;
+
+        const bonuses = Research.researchBonuses;
+        const bonusItems = [];
+
+        if (bonuses.allProductionBonus > 0) {
+            bonusItems.push(`<span>⚡ 所有生產：</span><span>+${bonuses.allProductionBonus}%</span>`);
+        }
+        if (bonuses.foodBonus > 0) {
+            bonusItems.push(`<span>🌾 食物加成：</span><span>+${bonuses.foodBonus}%</span>`);
+        }
+        if (bonuses.leafBonus > 0) {
+            bonusItems.push(`<span>🍃 葉子加成：</span><span>+${bonuses.leafBonus}%</span>`);
+        }
+        if (bonuses.waterBonus > 0) {
+            bonusItems.push(`<span>💧 水滴加成：</span><span>+${bonuses.waterBonus}%</span>`);
+        }
+        if (bonuses.larvaeBonus > 0) {
+            bonusItems.push(`<span>🐛 幼蟲加成：</span><span>+${bonuses.larvaeBonus}%</span>`);
+        }
+        if (bonuses.workerEfficiency > 0) {
+            bonusItems.push(`<span>👷 工蟻效率：</span><span>+${bonuses.workerEfficiency}%</span>`);
+        }
+        if (bonuses.soldierPower > 0) {
+            bonusItems.push(`<span>⚔️ 兵蟻力量：</span><span>+${bonuses.soldierPower}%</span>`);
+        }
+        if (bonuses.nurseEfficiency > 0) {
+            bonusItems.push(`<span>👩‍⚕️ 護理蟻效率：</span><span>+${bonuses.nurseEfficiency}%</span>`);
+        }
+        if (bonuses.queenEggRate > 0) {
+            bonusItems.push(`<span>👑 蟻后產卵：</span><span>+${bonuses.queenEggRate}%</span>`);
+        }
+        if (bonuses.roomEfficiency > 0) {
+            bonusItems.push(`<span>🏠 房間效率：</span><span>+${bonuses.roomEfficiency}%</span>`);
+        }
+        if (bonuses.invasionDefense > 0) {
+            bonusItems.push(`<span>🛡️ 入侵防禦：</span><span>+${bonuses.invasionDefense}%</span>`);
+        }
+        if (bonuses.weatherResistance > 0) {
+            bonusItems.push(`<span>🌤️ 天氣抗性：</span><span>+${bonuses.weatherResistance}%</span>`);
+        }
+        if (bonuses.autoCollectEnabled) {
+            bonusItems.push(`<span>🤖 自動收集：</span><span>已啟用</span>`);
+        }
+        if (bonuses.autoFeedEnabled) {
+            bonusItems.push(`<span>🍽️ 自動餵食：</span><span>已啟用</span>`);
+        }
+        if (bonuses.criticalHitChance > 0) {
+            bonusItems.push(`<span>💥 暴擊機率：</span><span>${bonuses.criticalHitChance}%</span>`);
+        }
+        if (bonuses.storageEfficiency > 0) {
+            bonusItems.push(`<span>📦 儲存效率：</span><span>+${bonuses.storageEfficiency}%</span>`);
+        }
+
+        if (bonusItems.length === 0) {
+            container.innerHTML = '<p class="no-bonuses">尚未解鎖任何研究加成</p>';
+        } else {
+            container.innerHTML = bonusItems.map(item => `
+                <div class="bonus-item">${item}</div>
+            `).join('');
+        }
     },
 
     /**
