@@ -69,6 +69,11 @@ const Game = {
     bindEvents() {
         // 收集按鈕
         document.getElementById('collect-btn').addEventListener('click', (e) => {
+            // 播放點擊音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
+            
             // 檢測 Shift 鍵觸發批量購買
             if (e.shiftKey) {
                 this.bulkBuyWorkers();
@@ -80,34 +85,52 @@ const Game = {
 
         // 購買工蟻按鈕
         document.getElementById('buy-worker-btn').addEventListener('click', () => {
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
             this.buyWorker();
             this.animateButton('buy-worker-btn');
         });
 
         // 購買兵蟻按鈕
         document.getElementById('buy-soldier-btn').addEventListener('click', () => {
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
             this.buySoldier();
             this.animateButton('buy-soldier-btn');
         });
 
         // 購買護理蟻按鈕
         document.getElementById('buy-nurse-btn').addEventListener('click', () => {
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
             this.buyNurse();
             this.animateButton('buy-nurse-btn');
         });
 
         // 房間升級按鈕
         document.getElementById('storage-upgrade-btn').addEventListener('click', () => {
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
             this.upgradeStorage();
             this.animateButton('storage-upgrade-btn');
         });
 
         document.getElementById('nursery-upgrade-btn').addEventListener('click', () => {
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
             this.upgradeNursery();
             this.animateButton('nursery-upgrade-btn');
         });
 
         document.getElementById('fungus-upgrade-btn').addEventListener('click', () => {
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
             this.upgradeFungus();
             this.animateButton('fungus-upgrade-btn');
         });
@@ -156,6 +179,32 @@ const Game = {
             if (typeof Effects !== 'undefined') {
                 Effects.toggleDarkMode();
             }
+            if (typeof Audio !== 'undefined') {
+                Audio.playClick();
+            }
+        });
+
+        // 音效設定
+        document.getElementById('setting-audio-enabled').addEventListener('change', (e) => {
+            if (typeof Audio !== 'undefined') {
+                Audio.toggle();
+            }
+        });
+
+        document.getElementById('setting-master-volume').addEventListener('input', (e) => {
+            const value = e.target.value / 100;
+            if (typeof Audio !== 'undefined') {
+                Audio.setMasterVolume(value);
+            }
+            document.getElementById('master-volume-display').textContent = `${e.target.value}%`;
+        });
+
+        document.getElementById('setting-sfx-volume').addEventListener('input', (e) => {
+            const value = e.target.value / 100;
+            if (typeof Audio !== 'undefined') {
+                Audio.setSfxVolume(value);
+            }
+            document.getElementById('sfx-volume-display').textContent = `${e.target.value}%`;
         });
 
         // 頁面關閉前儲存
@@ -196,6 +245,11 @@ const Game = {
             Effects.createCollectBurst(collectBtn, '🍃');
             Effects.bumpResource('leaf');
         }
+        
+        // 播放收集音效
+        if (typeof Audio !== 'undefined') {
+            Audio.playCollect();
+        }
 
         Utils.log(`收集了 ${amount} 葉子`);
     },
@@ -229,6 +283,11 @@ const Game = {
                 Effects.createResourceParticles('🐜', 1, buyBtn);
                 Effects.bumpResource('workers');
                 Effects.bumpResource('food');
+            }
+            
+            // 播放購買音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playBuy();
             }
 
             Utils.notify(`購買了 1 隻工蟻！`, 'success');
@@ -315,6 +374,11 @@ const Game = {
                 Effects.bumpResource('soldiers');
                 Effects.bumpResource('larvae');
             }
+            
+            // 播放購買音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playBuy();
+            }
 
             Utils.notify(`孵化了 1 隻兵蟻！`, 'success');
             Utils.log(`孵化了 1 隻兵蟻，價格: ${price} 幼蟲`);
@@ -353,6 +417,11 @@ const Game = {
                 Effects.createResourceParticles('👶', 1, buyBtn);
                 Effects.bumpResource('nurses');
                 Effects.bumpResource('food');
+            }
+            
+            // 播放購買音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playBuy();
             }
 
             Utils.notify(`購買了 1 隻護理蟻！`, 'success');
@@ -582,6 +651,11 @@ const Game = {
             if (typeof Effects !== 'undefined') {
                 Effects.createWeatherEffect(randomWeather);
             }
+            
+            // 播放天氣音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playWeather(randomWeather);
+            }
 
             // 通知玩家
             const weatherInfo = GameConfig.weather.types[randomWeather];
@@ -608,6 +682,11 @@ const Game = {
         // 通知玩家
         Utils.notify(`🏆 成就解鎖：${achievement.icon} ${achievement.name}`, 'success');
         Utils.log(`成就解鎖: ${achievement.name}`);
+        
+        // 播放成就音效
+        if (typeof Audio !== 'undefined') {
+            Audio.playAchievement();
+        }
         
         // 更新成就 UI
         this.updateAchievementsUI();
@@ -1001,13 +1080,24 @@ const Game = {
                 Effects.upgradeSuccess(upgradeBtn.closest('.room-card'));
                 Effects.bumpResource('food');
             }
+            
+            // 播放升級音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playUpgrade();
+            }
 
             Utils.notify(`儲藏室升級到 ${this.state.rooms.storage.level} 級！`, 'success');
             Utils.log(`儲藏室升級，價格: ${price} 食物，新等級: ${this.state.rooms.storage.level}`);
         } else if (this.state.rooms.storage.level >= maxLevel) {
             Utils.notify('儲藏室已達最高等級！', 'error');
+            if (typeof Audio !== 'undefined') {
+                Audio.playError();
+            }
         } else {
             Utils.notify(`食物不足！需要 ${price} 食物`, 'error');
+            if (typeof Audio !== 'undefined') {
+                Audio.playError();
+            }
             this.shakeButton('storage-upgrade-btn');
         }
     },
@@ -1043,6 +1133,11 @@ const Game = {
                 Effects.createResourceParticles('🥚', 1, upgradeBtn);
                 Effects.upgradeSuccess(upgradeBtn.closest('.room-card'));
                 Effects.bumpResource('food');
+            }
+            
+            // 播放升級音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playUpgrade();
             }
 
             Utils.notify(`育兒室升級到 ${this.state.rooms.nursery.level} 級！`, 'success');
@@ -1086,6 +1181,11 @@ const Game = {
                 Effects.createResourceParticles('🍄', 1, upgradeBtn);
                 Effects.upgradeSuccess(upgradeBtn.closest('.room-card'));
                 Effects.bumpResource('food');
+            }
+            
+            // 播放升級音效
+            if (typeof Audio !== 'undefined') {
+                Audio.playUpgrade();
             }
 
             Utils.notify(`真菌農場升級到 ${this.state.rooms.fungus.level} 級！`, 'success');
