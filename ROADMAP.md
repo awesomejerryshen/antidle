@@ -280,8 +280,8 @@
 
 ## 🔗 相關連結
 
-- **GitHub 仓库：** https://github.com/awesomejerryshen/antidle
-- **GitHub Pages：** https://awesomejerryshen.github.io/antidle/
+- **GitHub 仓库：** https://github.com/awesomejerry/antidle
+- **GitHub Pages：** https://awesomejerry.github.io/antidle/
 - **研究報告：** `RESEARCH_REPORT.md`
 - **開發指南：** `DEVELOPMENT.md`
 

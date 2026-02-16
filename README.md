@@ -1,6 +1,6 @@
 # AntIdle - 螞蟻放置遊戲
 
-[![Version](https://img.shields.io/badge/version-0.10.0-blue.svg)](https://github.com/awesomejerryshen/antidle)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/awesomejerry/antidle)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 一個基於瀏覽器的螞蟻放置遊戲，採用純 HTML/CSS/JavaScript 開發，無需後端伺服器。
@@ -24,14 +24,14 @@
 
 ### 遊戲連結
 
-- **線上遊戲**: https://awesomejerryshen.github.io/antidle/
-- **GitHub**: https://github.com/awesomejerryshen/antidle
+- **線上遊戲**: https://awesomejerry.github.io/antidle/
+- **GitHub**: https://github.com/awesomejerry/antidle
 
 ### 本地運行
 
 1. 下載專案
 ```bash
-git clone https://github.com/awesomejerryshen/antidle.git
+git clone https://github.com/awesomejerry/antidle.git
 cd antidle
 ```
 
@@ -168,8 +168,8 @@ MIT License
 
 ## 📮 聯絡方式
 
-- GitHub: https://github.com/awesomejerryshen/antidle
-- Issues: https://github.com/awesomejerryshen/antidle/issues
+- GitHub: https://github.com/awesomejerry/antidle
+- Issues: https://github.com/awesomejerry/antidle/issues
 
 ---
 

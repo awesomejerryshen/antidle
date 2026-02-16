@@ -168,12 +168,12 @@ antidle/
 ## 🚀 部署資訊
 
 ### GitHub
-- Repository: https://github.com/awesomejerryshen/antidle
+- Repository: https://github.com/awesomejerry/antidle
 - Tags: v0.1.0 ~ v0.8.0
 - Branches: master
 
 ### GitHub Pages
-- URL: https://awesomejerryshen.github.io/antidle/
+- URL: https://awesomejerry.github.io/antidle/
 - Auto-deploy: ✓
 
 ---
@@ -239,9 +239,9 @@ antidle/
 
 ## 📞 聯絡資訊
 
-- **GitHub**: https://github.com/awesomejerryshen/antidle
-- **Issues**: https://github.com/awesomejerryshen/antidle/issues
-- **Live Demo**: https://awesomejerryshen.github.io/antidle/
+- **GitHub**: https://github.com/awesomejerry/antidle
+- **Issues**: https://github.com/awesomejerry/antidle/issues
+- **Live Demo**: https://awesomejerry.github.io/antidle/
 
 ---
 
