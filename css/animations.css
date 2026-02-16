@@ -260,13 +260,45 @@ body.theme-transition {
 }
 
 body.dark-theme {
-    --color-bg: #1a1a1a;
-    --color-bg-dark: #2d2d2d;
-    --color-bg-card: #2a2a2a;
-    --color-text: #E0E0E0;
-    --color-text-light: #B0B0B0;
-    --color-border: #444444;
     background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 100%);
+}
+
+body.dark-theme .resource,
+body.dark-theme .room-card,
+body.dark-theme .stat-card,
+body.dark-theme .ant-type,
+body.dark-theme .achievement-card {
+    background-color: rgba(42, 42, 42, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme #game-header,
+body.dark-theme #game-main {
+    background-color: rgba(42, 42, 42, 0.95);
+}
+
+body.dark-theme .nav-btn {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-theme .nav-btn:hover,
+body.dark-theme .nav-btn.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #E0E0E0;
+}
+
+body.dark-theme .action-btn {
+    background-color: rgba(139, 69, 19, 0.8);
+}
+
+body.dark-theme .action-btn:hover {
+    background-color: rgba(160, 82, 45, 0.9);
+}
+
+body.dark-theme .rebirth-preview,
+body.dark-theme .rebirth-bonuses,
+body.dark-theme .upgrade-card {
+    background-color: rgba(42, 42, 42, 0.95);
 }
 
 /* 浮動提示 */
