@@ -388,6 +388,53 @@ const Effects = {
     },
 
     /**
+     * 創建成就解鎖效果
+     */
+    createAchievementEffect() {
+        // 創建金色閃光效果
+        for (let i = 0; i < 30; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: ${Math.random() * 15 + 5}px;
+                    height: ${Math.random() * 15 + 5}px;
+                    background: radial-gradient(circle, #FFD700, #FFA500);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 9999;
+                    left: ${Math.random() * window.innerWidth}px;
+                    top: ${Math.random() * window.innerHeight}px;
+                    animation: achievementParticle 1.5s ease-out forwards;
+                `;
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1500);
+            }, i * 50);
+        }
+        
+        // 創建閃光文字
+        const text = document.createElement('div');
+        text.textContent = '🏆 成就解鎖！';
+        text.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 20px #FFD700, 0 0 40px #FFA500;
+            pointer-events: none;
+            z-index: 9999;
+            animation: achievementText 2s ease-out forwards;
+        `;
+        document.body.appendChild(text);
+        
+        setTimeout(() => text.remove(), 2000);
+    },
+
+    /**
      * 載入保存的主題
      */
     loadSavedTheme() {
