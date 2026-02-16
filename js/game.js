@@ -70,6 +70,11 @@ const Game = {
         if (typeof Rebirth !== 'undefined') {
             this.updateRebirthUI();
         }
+        
+        // 初始化語言選擇器
+        if (typeof I18n !== 'undefined') {
+            document.getElementById('language-select').value = I18n.getCurrentLang();
+        }
 
         // 啟動遊戲循環
         this.startGameLoop();
@@ -231,6 +236,14 @@ const Game = {
                 Audio.setSfxVolume(value);
             }
             document.getElementById('sfx-volume-display').textContent = `${e.target.value}%`;
+        });
+
+        // 語言選擇
+        document.getElementById('language-select').addEventListener('change', (e) => {
+            const lang = e.target.value;
+            if (typeof I18n !== 'undefined') {
+                I18n.changeLanguage(lang);
+            }
         });
 
         // 重生按鈕
