@@ -151,6 +151,13 @@ const Game = {
             this.startAutoSave();
         });
 
+        // 深色模式切換
+        document.getElementById('dark-mode-btn').addEventListener('click', () => {
+            if (typeof Effects !== 'undefined') {
+                Effects.toggleDarkMode();
+            }
+        });
+
         // 頁面關閉前儲存
         window.addEventListener('beforeunload', () => {
             this.saveGame();
@@ -181,12 +188,14 @@ const Game = {
         this.state.leaf += amount;
         this.updateUI();
 
-        // 視覺效果：浮動數字和粒子
-        this.showFloatingNumber(amount, '🍃', document.getElementById('collect-btn'));
-        this.createParticles('leaf', document.getElementById('collect-btn'));
-
-        // 資源值動畫
-        this.animateResourceValue('leaf');
+        // 視覺效果：使用新的 Effects 模組
+        const collectBtn = document.getElementById('collect-btn');
+        this.showFloatingNumber(amount, '🍃', collectBtn);
+        
+        if (typeof Effects !== 'undefined') {
+            Effects.createCollectBurst(collectBtn, '🍃');
+            Effects.bumpResource('leaf');
+        }
 
         Utils.log(`收集了 ${amount} 葉子`);
     },
@@ -212,13 +221,15 @@ const Game = {
             this.state.workers += 1;
             this.updateUI();
 
-            // 視覺效果
-            this.showFloatingNumber(1, '🐜', document.getElementById('buy-worker-btn'));
-            this.createParticles('food', document.getElementById('buy-worker-btn'));
-
-            // 資源值動畫
-            this.animateResourceValue('workers');
-            this.animateResourceValue('food');
+            // 視覺效果：使用新的 Effects 模組
+            const buyBtn = document.getElementById('buy-worker-btn');
+            this.showFloatingNumber(1, '🐜', buyBtn);
+            
+            if (typeof Effects !== 'undefined') {
+                Effects.createResourceParticles('🐜', 1, buyBtn);
+                Effects.bumpResource('workers');
+                Effects.bumpResource('food');
+            }
 
             Utils.notify(`購買了 1 隻工蟻！`, 'success');
             Utils.log(`購買了 1 隻工蟻，價格: ${price} 食物`);
@@ -255,13 +266,15 @@ const Game = {
             this.state.workers += affordableAmount;
             this.updateUI();
 
-            // 視覺效果
-            this.showFloatingNumber(affordableAmount, '🐜', document.getElementById('collect-btn'));
-            this.createParticles('food', document.getElementById('collect-btn'));
-
-            // 資源值動畫
-            this.animateResourceValue('workers');
-            this.animateResourceValue('food');
+            // 視覺效果：使用新的 Effects 模組
+            const collectBtn = document.getElementById('collect-btn');
+            this.showFloatingNumber(affordableAmount, '🐜', collectBtn);
+            
+            if (typeof Effects !== 'undefined') {
+                Effects.createResourceParticles('🐜', affordableAmount, collectBtn);
+                Effects.bumpResource('workers');
+                Effects.bumpResource('food');
+            }
 
             Utils.notify(`批量購買了 ${affordableAmount} 隻工蟻！`, 'success');
             Utils.log(`批量購買了 ${affordableAmount} 隻工蟻，總價格: ${totalCost} 食物`);
@@ -293,13 +306,15 @@ const Game = {
             this.state.soldiers += 1;
             this.updateUI();
 
-            // 視覺效果
-            this.showFloatingNumber(1, '⚔️', document.getElementById('buy-soldier-btn'));
-            this.createParticles('food', document.getElementById('buy-soldier-btn'));
-
-            // 資源值動畫
-            this.animateResourceValue('soldiers');
-            this.animateResourceValue('larvae');
+            // 視覺效果：使用新的 Effects 模組
+            const buyBtn = document.getElementById('buy-soldier-btn');
+            this.showFloatingNumber(1, '⚔️', buyBtn);
+            
+            if (typeof Effects !== 'undefined') {
+                Effects.createResourceParticles('⚔️', 1, buyBtn);
+                Effects.bumpResource('soldiers');
+                Effects.bumpResource('larvae');
+            }
 
             Utils.notify(`孵化了 1 隻兵蟻！`, 'success');
             Utils.log(`孵化了 1 隻兵蟻，價格: ${price} 幼蟲`);
@@ -330,13 +345,15 @@ const Game = {
             this.state.nurses += 1;
             this.updateUI();
 
-            // 視覺效果
-            this.showFloatingNumber(1, '👶', document.getElementById('buy-nurse-btn'));
-            this.createParticles('food', document.getElementById('buy-nurse-btn'));
-
-            // 資源值動畫
-            this.animateResourceValue('nurses');
-            this.animateResourceValue('food');
+            // 視覺效果：使用新的 Effects 模組
+            const buyBtn = document.getElementById('buy-nurse-btn');
+            this.showFloatingNumber(1, '👶', buyBtn);
+            
+            if (typeof Effects !== 'undefined') {
+                Effects.createResourceParticles('👶', 1, buyBtn);
+                Effects.bumpResource('nurses');
+                Effects.bumpResource('food');
+            }
 
             Utils.notify(`購買了 1 隻護理蟻！`, 'success');
             Utils.log(`購買了 1 隻護理蟻，價格: ${price} 食物`);
@@ -532,6 +549,12 @@ const Game = {
         if (this.state.weather !== 'clear' && this.state.gameTime >= this.state.weatherEndTime) {
             // 恢復晴朗
             this.state.weather = 'clear';
+            
+            // 清除天氣視覺效果
+            if (typeof Effects !== 'undefined') {
+                Effects.clearWeatherEffects();
+            }
+            
             Utils.notify('🌤️ 天氣恢復晴朗', 'info');
             Utils.log('天氣恢復晴朗');
         }
@@ -554,6 +577,11 @@ const Game = {
             const interval = GameConfig.weather.minInterval +
                 Math.random() * (GameConfig.weather.maxInterval - GameConfig.weather.minInterval);
             this.state.nextWeatherTime = this.state.gameTime + duration + interval;
+
+            // 創建天氣視覺效果
+            if (typeof Effects !== 'undefined') {
+                Effects.createWeatherEffect(randomWeather);
+            }
 
             // 通知玩家
             const weatherInfo = GameConfig.weather.types[randomWeather];
@@ -964,12 +992,15 @@ const Game = {
             this.state.rooms.storage.level += 1;
             this.updateUI();
 
-            // 視覺效果
-            this.showFloatingNumber(1, '🏠', document.getElementById('storage-upgrade-btn'));
-            this.createParticles('food', document.getElementById('storage-upgrade-btn'));
-
-            // 資源值動畫
-            this.animateResourceValue('food');
+            // 視覺效果：使用新的 Effects 模組
+            const upgradeBtn = document.getElementById('storage-upgrade-btn');
+            this.showFloatingNumber(1, '🏠', upgradeBtn);
+            
+            if (typeof Effects !== 'undefined') {
+                Effects.createResourceParticles('🏠', 1, upgradeBtn);
+                Effects.upgradeSuccess(upgradeBtn.closest('.room-card'));
+                Effects.bumpResource('food');
+            }
 
             Utils.notify(`儲藏室升級到 ${this.state.rooms.storage.level} 級！`, 'success');
             Utils.log(`儲藏室升級，價格: ${price} 食物，新等級: ${this.state.rooms.storage.level}`);
@@ -1004,12 +1035,15 @@ const Game = {
             this.state.rooms.nursery.level += 1;
             this.updateUI();
 
-            // 視覺效果
-            this.showFloatingNumber(1, '🥚', document.getElementById('nursery-upgrade-btn'));
-            this.createParticles('food', document.getElementById('nursery-upgrade-btn'));
-
-            // 資源值動畫
-            this.animateResourceValue('food');
+            // 視覺效果：使用新的 Effects 模組
+            const upgradeBtn = document.getElementById('nursery-upgrade-btn');
+            this.showFloatingNumber(1, '🥚', upgradeBtn);
+            
+            if (typeof Effects !== 'undefined') {
+                Effects.createResourceParticles('🥚', 1, upgradeBtn);
+                Effects.upgradeSuccess(upgradeBtn.closest('.room-card'));
+                Effects.bumpResource('food');
+            }
 
             Utils.notify(`育兒室升級到 ${this.state.rooms.nursery.level} 級！`, 'success');
             Utils.log(`育兒室升級，價格: ${price} 食物，新等級: ${this.state.rooms.nursery.level}`);
@@ -1044,12 +1078,15 @@ const Game = {
             this.state.rooms.fungus.level += 1;
             this.updateUI();
 
-            // 視覺效果
-            this.showFloatingNumber(1, '🍄', document.getElementById('fungus-upgrade-btn'));
-            this.createParticles('food', document.getElementById('fungus-upgrade-btn'));
-
-            // 資源值動畫
-            this.animateResourceValue('food');
+            // 視覺效果：使用新的 Effects 模組
+            const upgradeBtn = document.getElementById('fungus-upgrade-btn');
+            this.showFloatingNumber(1, '🍄', upgradeBtn);
+            
+            if (typeof Effects !== 'undefined') {
+                Effects.createResourceParticles('🍄', 1, upgradeBtn);
+                Effects.upgradeSuccess(upgradeBtn.closest('.room-card'));
+                Effects.bumpResource('food');
+            }
 
             Utils.notify(`真菌農場升級到 ${this.state.rooms.fungus.level} 級！`, 'success');
             Utils.log(`真菌農場升級，價格: ${price} 食物，新等級: ${this.state.rooms.fungus.level}`);
