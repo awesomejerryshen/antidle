@@ -118,6 +118,15 @@ const Rebirth = {
         Utils.notify(`🌟 重生成功！獲得 ${earnedPoints} 重生點數！`, 'success');
         Utils.log(`重生完成，獲得 ${earnedPoints} 點，總計 ${this.rebirthPoints} 點`);
 
+        // 記錄日誌
+        if (typeof Journal !== 'undefined') {
+            Journal.log(Journal.types.REBIRTH, `重生成功！獲得 ${earnedPoints} 點，總計 ${Rebirth.rebirthPoints} 點`, {
+                points: earnedPoints,
+                totalPoints: Rebirth.rebirthPoints,
+                count: Rebirth.rebirthCount,
+            });
+        }
+
         // 播放音效
         if (typeof Audio !== 'undefined') {
             Audio.playAchievement();

@@ -232,6 +232,14 @@ const Research = {
         // 通知
         Utils.notify(`🎉 研究完成：${research.name}！`, 'success');
         Utils.log(`研究完成：${research.name}`);
+        
+        // 記錄日誌
+        if (typeof Journal !== 'undefined') {
+            Journal.log(Journal.types.RESEARCH, `研究完成：${research.icon} ${research.name}`, {
+                id: this.currentResearch,
+                name: research.name,
+            });
+        }
 
         // 播放音效
         if (typeof Audio !== 'undefined') {
