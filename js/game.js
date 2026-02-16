@@ -771,40 +771,146 @@ const Game = {
     updateAchievementsUI() {
         const container = document.getElementById('achievements-list');
         if (!container) return;
-        
-        const totalAchievements = Object.keys(GameConfig.achievements).length;
-        const unlockedCount = this.state.achievements.length;
-        
+
+        // 獲取所有成就
+        const allAchievements = Object.entries(GameConfig.achievements);
+        const unlockedIds = this.state.achievements;
+        const totalAchievements = allAchievements.length;
+        const unlockedCount = unlockedIds.length;
+
         // 更新統計
         const statsEl = document.getElementById('achievements-stats');
         if (statsEl) {
-            statsEl.textContent = `${unlockedCount} / ${totalAchievements}`;
-        }
-        
-        // 清空並重建列表
-        container.innerHTML = '';
-        
-        if (this.state.achievements.length === 0) {
-            container.innerHTML = '<p class="no-achievements">尚未解鎖任何成就，繼續努力！</p>';
-            return;
-        }
-        
-        // 顯示已解鎖的成就
-        this.state.achievements.forEach(id => {
-            const achievement = GameConfig.achievements[id];
-            if (!achievement) return;
-            
-            const card = document.createElement('div');
-            card.className = 'achievement-card unlocked';
-            card.innerHTML = `
-                <span class="achievement-icon">${achievement.icon}</span>
-                <div class="achievement-info">
-                    <h4>${achievement.name}</h4>
-                    <p>${achievement.description}</p>
+            const percentage = Math.round((unlockedCount / totalAchievements) * 100);
+            statsEl.innerHTML = `
+                <div class="achievements-stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">已解鎖</span>
+                        <span class="stat-value">${unlockedCount}/${totalAchievements}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">完成度</span>
+                        <span class="stat-value">${percentage}%</span>
+                    </div>
                 </div>
             `;
+        }
+
+        // 清空並重建列表
+        container.innerHTML = '';
+
+        // 先顯示已解鎖的成就
+        allAchievements.forEach(([id, achievement]) => {
+            const isUnlocked = unlockedIds.includes(id);
+            const card = document.createElement('div');
+            card.className = 'achievement-card';
+            if (isUnlocked) {
+                card.classList.add('unlocked');
+            } else {
+                card.classList.add('locked');
+            }
+
+            // 檢查成就進度（如果有的話）
+            let progressText = '';
+            if (!isUnlocked) {
+                const progress = this.getAchievementProgress(id, achievement);
+                if (progress) {
+                    progressText = `<p class="achievement-progress">${progress}</p>`;
+                }
+            }
+
+            card.innerHTML = `
+                <span class="achievement-icon">${isUnlocked ? achievement.icon : '🔒'}</span>
+                <div class="achievement-info">
+                    <h4>${isUnlocked ? achievement.name : '???'}</h4>
+                    <p>${isUnlocked ? achievement.description : '尚未解鎖'}</p>
+                    ${progressText}
+                </div>
+                <span class="achievement-status">${isUnlocked ? '✅' : '🔒'}</span>
+            `;
+
             container.appendChild(card);
         });
+    },
+
+    /**
+     * 獲取成就進度提示
+     * @param {string} achievementId - 成就 ID
+     * @param {Object} achievement - 成就對象
+     * @returns {string} 進度提示文字
+     */
+    getAchievementProgress(achievementId, achievement) {
+        const state = this.state;
+
+        // 根據成就類型返回進度提示
+        switch (achievementId) {
+            // 食物相關
+            case 'food100':
+                return `進度：${Utils.formatNumber(state.totalFood)}/100 食物`;
+            case 'food1000':
+                return `進度：${Utils.formatNumber(state.totalFood)}/1,000 食物`;
+            case 'food10000':
+                return `進度：${Utils.formatNumber(state.totalFood)}/10,000 食物`;
+            case 'food100000':
+                return `進度：${Utils.formatNumber(state.totalFood)}/100,000 食物`;
+
+            // 螞蟻相關
+            case 'worker10':
+                return `進度：${state.workers}/10 工蟻`;
+            case 'worker50':
+                return `進度：${state.workers}/50 工蟻`;
+            case 'worker100':
+                return `進度：${state.workers}/100 工蟻`;
+            case 'soldier10':
+                return `進度：${state.soldiers}/10 兵蟻`;
+            case 'soldier50':
+                return `進度：${state.soldiers}/50 兵蟻`;
+            case 'nurse10':
+                return `進度：${state.nurses}/10 護理蟻`;
+            case 'nurse50':
+                return `進度：${state.nurses}/50 護理蟻`;
+            case 'ants100':
+                const totalAnts = state.workers + state.soldiers + state.nurses;
+                return `進度：${totalAnts}/100 螞蟻`;
+            case 'ants500':
+                const totalAnts2 = state.workers + state.soldiers + state.nurses;
+                return `進度：${totalAnts2}/500 螞蟻`;
+
+            // 房間相關
+            case 'firstRoom':
+                const hasRoom = state.rooms.storage.level > 0 || state.rooms.nursery.level > 0 || state.rooms.fungus.level > 0;
+                return hasRoom ? '✓ 已建造房間' : '建造你的第一個房間';
+            case 'allRooms':
+                const roomsCount = (state.rooms.storage.level > 0 ? 1 : 0) + (state.rooms.nursery.level > 0 ? 1 : 0) + (state.rooms.fungus.level > 0 ? 1 : 0);
+                return `進度：${roomsCount}/3 種房間`;
+            case 'allRoomsLevel5':
+                const maxLevelRooms = (state.rooms.storage.level >= 5 ? 1 : 0) + (state.rooms.nursery.level >= 5 ? 1 : 0) + (state.rooms.fungus.level >= 5 ? 1 : 0);
+                return `進度：${maxLevelRooms}/3 房間達到 5 級`;
+
+            // 時間相關
+            case 'playTime10min':
+                const time10 = Math.floor(state.gameTime / 60);
+                return `進度：${time10}/10 分鐘`;
+            case 'playTime1hour':
+                const time60 = Math.floor(state.gameTime / 60);
+                return `進度：${time60}/60 分鐘`;
+            case 'playTime1day':
+                const time1440 = Math.floor(state.gameTime / 60);
+                return `進度：${time1440}/1,440 分鐘`;
+
+            // 其他
+            case 'defense1':
+                return `進度：${state.defenseWins}/1 次成功防禦`;
+            case 'defense10':
+                return `進度：${state.defenseWins}/10 次成功防禦`;
+            case 'click100':
+                return '點擊收集 100 次';
+            case 'click1000':
+                return '點擊收集 1,000 次';
+
+            default:
+                return '';
+        }
     },
 
     /**
