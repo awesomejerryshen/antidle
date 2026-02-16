@@ -594,6 +594,11 @@ const Game = {
         if (typeof Research !== 'undefined') {
             Research.updateResearchProgress(delta);
             this.updateResearchUI();
+            
+            // 研究點數獲取（每 30 秒獲得 1 點）
+            if (Math.floor(this.state.gameTime) % 30 === 0 && this.state.gameTime > 0) {
+                Research.earnResearchPoints(1);
+            }
         }
         
         // 檢查成就（每 5 秒檢查一次，避免頻繁檢查）
