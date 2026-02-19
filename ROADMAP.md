@@ -214,15 +214,19 @@
 
 ## 🛠️ 技術債和優化
 
+### 已完成 ✅
+- [x] 程式碼模組化重構（game.js 拆分為 5 個模組）
+- [x] 效能優化（requestAnimationFrame + UI 節流）
+
 ### 待處理技術債
-- [ ] 程式碼模組化重構
 - [ ] 加入 TypeScript 類型檢查
 - [ ] 單元測試覆蓋
 - [ ] 效能優化（大量螞蟻時的渲染）
 
 ### 效能優化
-- [ ] 减少 DOM 操作頻率
-- [ ] 使用 RequestAnimationFrame 代替 setInterval
+- [x] 使用 requestAnimationFrame 代替 setInterval
+- [x] UI 更新節流
+- [x] 批次 DOM 更新
 - [ ] 資源懶載入
 - [ ] 離線緩存策略
 

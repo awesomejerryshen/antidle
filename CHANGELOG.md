@@ -2,6 +2,25 @@
 
 本專案遵循 [語義化版本](https://semver.org/lang/zh-TW/)。
 
+## [0.12.0] - 2026-02-20
+
+### 技術優化 🔧
+#### 程式碼模組化
+- **重構**：game.js（2112行）拆分為 5 個模組
+  - `game-resources.js` - 資源管理（257 行）
+  - `game-rooms.js` - 房間系統（167 行）
+  - `game-weather.js` - 天氣系統（56 行）
+  - `game-invasion.js` - 入侵事件（52 行）
+  - `game-core.js` - 核心邏輯（1313 行）
+- **改進**：總代碼量減少 267 行（移除重複代碼）
+
+#### 效能優化
+- **改進**：遊戲循環改用 `requestAnimationFrame`（取代 setInterval）
+- **新增**：UI 更新節流
+  - 資源數字：每 100ms 更新
+  - 按鈕狀態：每 500ms 更新
+- **改進**：批次 DOM 更新（使用 DocumentFragment）
+
 ## [0.11.0] - 2026-02-17
 
 ### Bug 修復 🔧
