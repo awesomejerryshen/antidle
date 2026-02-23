@@ -1,0 +1,12 @@
+{
+  "name": "antidle",
+  "version": "1.0.0",
+  "description": "Ant Idle Game",
+  "scripts": {
+    "test": "playwright test",
+    "test:unit": "playwright test tests/unit/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
