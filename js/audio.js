@@ -15,9 +15,10 @@ const Audio = {
     // 是否啟用音效
     enabled: true,
 
-    // 背景音樂播放器
-    musicPlayer: null,
-    musicPlaying: false,
+    // 背景音樂
+    bgmEnabled: false,
+    bgmVolume: 0.3,
+    bgmNodes: null,
 
     /**
      * 初始化音效系統
@@ -47,6 +48,8 @@ const Audio = {
             this.masterVolume = settings.masterVolume || 0.3;
             this.sfxVolume = settings.sfxVolume || 0.5;
             this.musicVolume = settings.musicVolume || 0.2;
+            this.bgmEnabled = settings.bgmEnabled || false;
+            this.bgmVolume = settings.bgmVolume || 0.3;
         }
     },
 
@@ -58,7 +61,9 @@ const Audio = {
             enabled: this.enabled,
             masterVolume: this.masterVolume,
             sfxVolume: this.sfxVolume,
-            musicVolume: this.musicVolume
+            musicVolume: this.musicVolume,
+            bgmEnabled: this.bgmEnabled,
+            bgmVolume: this.bgmVolume
         }));
     },
 
@@ -394,6 +399,74 @@ const Audio = {
     setMusicVolume(value) {
         this.musicVolume = Math.max(0, Math.min(1, value));
         this.saveSettings();
+    },
+
+    startBgm() {
+        this.ensureContext();
+        if (!this.context || this.bgmNodes) return;
+
+        const masterGain = this.context.createGain();
+        masterGain.gain.value = this.masterVolume * this.bgmVolume * 0.15;
+        masterGain.connect(this.context.destination);
+
+        const oscillators = [];
+        const baseFreqs = [65.41, 82.41, 98.00, 130.81];
+        
+        baseFreqs.forEach((freq, i) => {
+            const osc = this.context.createOscillator();
+            const gain = this.context.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            
+            gain.gain.value = 0.2 - i * 0.03;
+            
+            osc.connect(gain);
+            gain.connect(masterGain);
+            
+            osc.start();
+            oscillators.push({ osc, gain });
+        });
+
+        this.bgmNodes = { masterGain, oscillators };
+        this.bgmEnabled = true;
+        this.saveSettings();
+        Utils.log('背景音樂已啟動');
+    },
+
+    stopBgm() {
+        if (!this.bgmNodes) return;
+
+        this.bgmNodes.oscillators.forEach(({ osc }) => {
+            osc.stop();
+        });
+        this.bgmNodes = null;
+        this.bgmEnabled = false;
+        this.saveSettings();
+        Utils.log('背景音樂已停止');
+    },
+
+    toggleBgm() {
+        if (this.bgmEnabled) {
+            this.stopBgm();
+        } else {
+            this.startBgm();
+        }
+        return this.bgmEnabled;
+    },
+
+    setBgmVolume(value) {
+        this.bgmVolume = Math.max(0, Math.min(1, value));
+        if (this.bgmNodes) {
+            this.bgmNodes.masterGain.gain.value = this.masterVolume * this.bgmVolume * 0.15;
+        }
+        this.saveSettings();
+    },
+
+    restoreBgm() {
+        if (this.bgmEnabled && this.context) {
+            this.startBgm();
+        }
     }
 };
 

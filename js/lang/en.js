@@ -187,6 +187,8 @@ window.translations['en'] = {
             enabled: 'Enable Audio',
             masterVolume: 'Master Volume',
             sfxVolume: 'SFX Volume',
+            bgmEnabled: 'Background Music',
+            bgmVolume: 'Music Volume',
         },
         theme: {
             title: 'Theme Settings',

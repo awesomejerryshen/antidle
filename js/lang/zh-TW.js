@@ -187,6 +187,8 @@ window.translations['zh-TW'] = {
             enabled: '啟用音效',
             masterVolume: '主音量',
             sfxVolume: '音效音量',
+            bgmEnabled: '背景音樂',
+            bgmVolume: '音樂音量',
         },
         theme: {
             title: '主題設定',

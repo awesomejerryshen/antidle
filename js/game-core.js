@@ -77,6 +77,12 @@ const Game = {
             document.getElementById('language-select').value = I18n.getCurrentLang();
         }
         
+        if (typeof Audio !== 'undefined') {
+            document.getElementById('setting-bgm-enabled').checked = Audio.bgmEnabled;
+            document.getElementById('setting-bgm-volume').value = Audio.bgmVolume * 100;
+            document.getElementById('bgm-volume-display').textContent = `${Math.round(Audio.bgmVolume * 100)}%`;
+        }
+        
         if (typeof Journal !== 'undefined') {
             Journal.updateJournalUI();
         }
@@ -242,6 +248,24 @@ const Game = {
                 Audio.setSfxVolume(value);
             }
             document.getElementById('sfx-volume-display').textContent = `${e.target.value}%`;
+        });
+
+        document.getElementById('setting-bgm-enabled').addEventListener('change', (e) => {
+            if (typeof Audio !== 'undefined') {
+                if (e.target.checked) {
+                    Audio.startBgm();
+                } else {
+                    Audio.stopBgm();
+                }
+            }
+        });
+
+        document.getElementById('setting-bgm-volume').addEventListener('input', (e) => {
+            const value = e.target.value / 100;
+            if (typeof Audio !== 'undefined') {
+                Audio.setBgmVolume(value);
+            }
+            document.getElementById('bgm-volume-display').textContent = `${e.target.value}%`;
         });
 
         document.getElementById('language-select').addEventListener('change', (e) => {
