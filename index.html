@@ -200,9 +200,28 @@
                 </div>
 
                 <div id="colony-view-section" class="colony-view-section">
-                    <h3>蟻巢可視化 / Colony View</h3>
-                    <div id="colony-view-grid" class="colony-view-grid">
-                        <div class="colony-room-card" data-room="storage">
+                    <h3 data-i18n="colonyView.title">蟻巢可視化</h3>
+                    <div class="colony-cross-section">
+                        <div class="colony-surface-grass" aria-hidden="true"></div>
+                        <div class="colony-surface-label">SURFACE</div>
+                        <div class="colony-soil-layer surface"></div>
+                        <div class="colony-soil-layer deep"></div>
+                        <div class="colony-depth-label depth-top">UPPER TUNNELS</div>
+                        <div class="colony-depth-label depth-bottom">DEEP NEST</div>
+                        <div class="colony-shaft-cap"></div>
+                        <div class="colony-tunnel tunnel-main"></div>
+                        <div class="colony-tunnel tunnel-branch storage-branch"></div>
+                        <div class="colony-tunnel tunnel-branch nursery-branch"></div>
+                        <div class="colony-tunnel tunnel-branch fungus-branch"></div>
+                        <div class="colony-room-chamber chamber-storage" aria-hidden="true"></div>
+                        <div class="colony-room-chamber chamber-nursery" aria-hidden="true"></div>
+                        <div class="colony-room-chamber chamber-fungus" aria-hidden="true"></div>
+                        <div class="colony-ant-lane lane-storage"></div>
+                        <div class="colony-ant-lane lane-nursery"></div>
+                        <div class="colony-ant-lane lane-fungus"></div>
+                        <div id="colony-ants" class="colony-ants" aria-hidden="true"></div>
+
+                        <div class="colony-room-card colony-room-node" data-room="storage">
                             <div class="room-visual">
                                 <span class="room-icon-large">🏠</span>
                             </div>
@@ -211,8 +230,10 @@
                                 <span class="room-level-display">Lv. <span id="cv-storage-level">0</span></span>
                                 <span class="room-stat"><span id="cv-storage-stat">0</span> <span data-i18n="colonyView.capacity">容量</span></span>
                             </div>
+                            <div class="room-upgrade-burst" id="cv-storage-burst" aria-hidden="true"></div>
                         </div>
-                        <div class="colony-room-card" data-room="nursery">
+
+                        <div class="colony-room-card colony-room-node" data-room="nursery">
                             <div class="room-visual">
                                 <span class="room-icon-large">🥚</span>
                             </div>
@@ -221,8 +242,10 @@
                                 <span class="room-level-display">Lv. <span id="cv-nursery-level">0</span></span>
                                 <span class="room-stat"><span id="cv-nursery-stat">0</span>/s <span data-i18n="colonyView.hatchRate">孵化</span></span>
                             </div>
+                            <div class="room-upgrade-burst" id="cv-nursery-burst" aria-hidden="true"></div>
                         </div>
-                        <div class="colony-room-card" data-room="fungus">
+
+                        <div class="colony-room-card colony-room-node" data-room="fungus">
                             <div class="room-visual">
                                 <span class="room-icon-large">🍄</span>
                             </div>
@@ -231,6 +254,7 @@
                                 <span class="room-level-display">Lv. <span id="cv-fungus-level">0</span></span>
                                 <span class="room-stat"><span id="cv-fungus-stat">0</span>/s <span data-i18n="colonyView.production">產出</span></span>
                             </div>
+                            <div class="room-upgrade-burst" id="cv-fungus-burst" aria-hidden="true"></div>
                         </div>
                     </div>
                 </div>

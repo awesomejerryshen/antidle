@@ -32,6 +32,9 @@ const GameRooms = {
             if (typeof Audio !== 'undefined') {
                 Audio.playUpgrade();
             }
+            if (typeof ColonyView !== 'undefined') {
+                ColonyView.triggerUpgradeAnimation('storage');
+            }
 
             Utils.notify(`儲藏室升級到 ${game.state.rooms.storage.level} 級！`, 'success');
             Utils.log(`儲藏室升級，價格: ${price} 食物，新等級: ${game.state.rooms.storage.level}`);
@@ -77,6 +80,9 @@ const GameRooms = {
             if (typeof Audio !== 'undefined') {
                 Audio.playUpgrade();
             }
+            if (typeof ColonyView !== 'undefined') {
+                ColonyView.triggerUpgradeAnimation('nursery');
+            }
 
             Utils.notify(`育兒室升級到 ${game.state.rooms.nursery.level} 級！`, 'success');
             Utils.log(`育兒室升級，價格: ${price} 食物，新等級: ${game.state.rooms.nursery.level}`);
@@ -115,6 +121,9 @@ const GameRooms = {
             
             if (typeof Audio !== 'undefined') {
                 Audio.playUpgrade();
+            }
+            if (typeof ColonyView !== 'undefined') {
+                ColonyView.triggerUpgradeAnimation('fungus');
             }
 
             Utils.notify(`真菌農場升級到 ${game.state.rooms.fungus.level} 級！`, 'success');

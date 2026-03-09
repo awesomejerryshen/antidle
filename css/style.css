@@ -1451,30 +1451,251 @@ body.dark-theme .filter-btn.active {
 .colony-view-section {
     margin-top: var(--spacing-xl);
     padding: var(--spacing-lg);
-    background-color: var(--color-bg-dark);
+    background: linear-gradient(180deg, rgba(223, 192, 139, 0.95), rgba(122, 80, 42, 0.92));
     border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
 .colony-view-section h3 {
-    color: var(--color-primary);
+    color: #fff7df;
     margin-bottom: var(--spacing-lg);
     font-size: var(--font-size-lg);
     text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-.colony-view-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: var(--spacing-lg);
+.colony-cross-section {
+    position: relative;
+    min-height: 500px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(180deg, #efe0ba 0%, #c99158 10%, #935c35 42%, #60361f 72%, #432414 100%);
+    box-shadow: inset 0 18px 40px rgba(255, 255, 255, 0.15), inset 0 -25px 50px rgba(48, 24, 12, 0.45);
+}
+
+.colony-soil-layer,
+.colony-tunnel,
+.colony-ant-lane,
+.colony-ants,
+.colony-room-chamber,
+.colony-shaft-cap,
+.colony-surface-grass,
+.colony-depth-label,
+.colony-surface-label {
+    position: absolute;
+}
+
+.colony-surface-grass {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background: linear-gradient(180deg, #6eb95e, #4e8f42);
+    box-shadow: 0 2px 0 rgba(255, 255, 255, 0.15);
+    z-index: 1;
+}
+
+.colony-surface-label,
+.colony-depth-label {
+    left: 20px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 244, 219, 0.88);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    z-index: 2;
+}
+
+.colony-surface-label {
+    top: 20px;
+}
+
+.depth-top {
+    top: 92px;
+}
+
+.depth-bottom {
+    bottom: 18px;
+}
+
+.colony-soil-layer.surface {
+    top: 18px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(246, 234, 201, 0.95), rgba(215, 176, 119, 0.86));
+    border-bottom: 4px dashed rgba(126, 79, 43, 0.55);
+}
+
+.colony-soil-layer.deep {
+    inset: 78px 0 0 0;
+    background-image: radial-gradient(circle at 15% 20%, rgba(255, 240, 199, 0.14) 0 4px, transparent 5px),
+                      radial-gradient(circle at 70% 35%, rgba(255, 240, 199, 0.1) 0 3px, transparent 4px),
+                      radial-gradient(circle at 30% 70%, rgba(255, 240, 199, 0.08) 0 3px, transparent 4px),
+                      radial-gradient(circle at 80% 80%, rgba(255, 240, 199, 0.08) 0 2px, transparent 3px);
+}
+
+.colony-shaft-cap {
+    top: 26px;
+    left: calc(50% - 34px);
+    width: 68px;
+    height: 28px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(94, 56, 29, 0.9), rgba(59, 33, 19, 0.95));
+    box-shadow: inset 0 0 10px rgba(255, 225, 165, 0.12);
+    z-index: 2;
+}
+
+.colony-tunnel {
+    background: radial-gradient(circle at 50% 50%, rgba(90, 55, 31, 0.98), rgba(50, 27, 16, 0.98));
+    box-shadow: inset 0 0 18px rgba(255, 228, 176, 0.12), 0 0 14px rgba(0, 0, 0, 0.18);
+    z-index: 1;
+}
+
+.tunnel-main {
+    top: 48px;
+    left: calc(50% - 28px);
+    width: 56px;
+    height: calc(100% - 66px);
+    border-radius: 28px;
+}
+
+.tunnel-branch {
+    height: 28px;
+    border-radius: 999px;
+}
+
+.storage-branch {
+    top: 142px;
+    left: 22%;
+    width: 30%;
+}
+
+.nursery-branch {
+    top: 246px;
+    left: 48%;
+    width: 22%;
+}
+
+.fungus-branch {
+    top: 358px;
+    left: 30%;
+    width: 22%;
+}
+
+.colony-room-chamber {
+    border-radius: 999px;
+    background: radial-gradient(circle at 50% 45%, rgba(74, 40, 20, 0.96), rgba(42, 21, 12, 0.98));
+    box-shadow: inset 0 0 18px rgba(255, 225, 165, 0.12), 0 14px 30px rgba(0, 0, 0, 0.18);
+    z-index: 1;
+}
+
+.chamber-storage {
+    top: 100px;
+    left: 5%;
+    width: 270px;
+    height: 120px;
+}
+
+.chamber-nursery {
+    top: 204px;
+    right: 5%;
+    width: 270px;
+    height: 120px;
+}
+
+.chamber-fungus {
+    top: 314px;
+    left: 14%;
+    width: 270px;
+    height: 130px;
+}
+
+.colony-ant-lane {
+    height: 4px;
+    background: rgba(255, 233, 173, 0.22);
+    border-radius: 999px;
+}
+
+.lane-storage {
+    top: 154px;
+    left: 22%;
+    width: 30%;
+}
+
+.lane-nursery {
+    top: 258px;
+    left: 48%;
+    width: 22%;
+}
+
+.lane-fungus {
+    top: 370px;
+    left: 30%;
+    width: 22%;
+}
+
+.colony-ants {
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.colony-ant {
+    position: absolute;
+    font-size: var(--ant-size, 0.9rem);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+    animation: colony-ant-walk var(--ant-duration, 9s) linear infinite;
+    animation-delay: var(--ant-delay, 0s);
+}
+
+.colony-ant[data-lane="storage"] {
+    top: 144px;
+    left: 22%;
+    --ant-travel: 30%;
+}
+
+.colony-ant[data-lane="nursery"] {
+    top: 248px;
+    left: 48%;
+    --ant-travel: 22%;
+}
+
+.colony-ant[data-lane="fungus"] {
+    top: 360px;
+    left: 30%;
+    --ant-travel: 22%;
 }
 
 .colony-room-card {
-    background-color: var(--color-bg-card);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-md);
+    background-color: rgba(255, 248, 233, 0.94);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: 24px;
     text-align: center;
-    transition: all var(--transition-base);
-    border: 2px solid transparent;
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+    border: 2px solid rgba(255, 241, 204, 0.45);
+    box-shadow: 0 10px 24px rgba(61, 32, 12, 0.25);
+}
+
+.colony-room-node {
+    position: absolute;
+    width: 210px;
+    z-index: 3;
+}
+
+.colony-room-node[data-room="storage"] {
+    top: 112px;
+    left: 8%;
+}
+
+.colony-room-node[data-room="nursery"] {
+    top: 216px;
+    right: 8%;
+}
+
+.colony-room-node[data-room="fungus"] {
+    top: 328px;
+    left: 18%;
 }
 
 .colony-room-card:hover {
@@ -1484,12 +1705,12 @@ body.dark-theme .filter-btn.active {
 }
 
 .room-visual {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
 }
 
 .room-icon-large {
     font-size: 2.5rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
 .room-details {
@@ -1499,8 +1720,8 @@ body.dark-theme .filter-btn.active {
 }
 
 .room-name {
-    font-weight: 600;
-    color: var(--color-text);
+    font-weight: 700;
+    color: #56371d;
     font-size: var(--font-size-base);
 }
 
@@ -1512,17 +1733,275 @@ body.dark-theme .filter-btn.active {
     font-weight: 700;
     font-size: var(--font-size-sm);
     display: inline-block;
+    align-self: center;
 }
 
 .room-stat {
     font-size: var(--font-size-sm);
-    color: var(--color-text-light);
+    color: #7b5636;
+}
+
+.room-upgrade-burst {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-weight: 700;
+    color: #fff7df;
+    background: linear-gradient(135deg, #4caf50, #8bc34a);
+    padding: 4px 10px;
+    border-radius: 999px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+    pointer-events: none;
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.35);
+}
+
+.colony-room-node.level-up {
+    animation: colony-room-level-up 1.2s ease;
+    box-shadow: 0 0 0 4px rgba(255, 243, 205, 0.35), 0 0 32px rgba(255, 211, 92, 0.65);
+    border-color: rgba(255, 210, 91, 0.95);
+}
+
+.room-upgrade-burst.show {
+    animation: colony-upgrade-burst 1.2s ease forwards;
+}
+
+@keyframes colony-room-level-up {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.05); }
+    60% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+@keyframes colony-upgrade-burst {
+    0% {
+        opacity: 0;
+        transform: translateY(8px) scale(0.85);
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(-8px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-28px) scale(1.08);
+    }
+}
+
+@keyframes colony-ant-walk {
+    0% {
+        transform: translateX(0) scaleX(1);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    45% { transform: translateX(var(--ant-travel)) scaleX(1); opacity: 1; }
+    50% { transform: translateX(var(--ant-travel)) scaleX(-1); opacity: 1; }
+    90% { transform: translateX(0) scaleX(-1); opacity: 1; }
+    100% {
+        transform: translateX(0) scaleX(1);
+        opacity: 0;
+    }
 }
 
 body.dark-theme .colony-view-section {
-    background-color: rgba(42, 42, 42, 0.95);
+    background: linear-gradient(180deg, rgba(101, 72, 43, 0.98), rgba(49, 30, 20, 0.95));
+}
+
+body.dark-theme .colony-cross-section {
+    background: linear-gradient(180deg, #7c5b3d 0%, #5f422c 12%, #44291d 45%, #2d1c14 100%);
 }
 
 body.dark-theme .colony-room-card {
-    background-color: rgba(60, 60, 60, 0.95);
+    background-color: rgba(62, 45, 35, 0.96);
+    border-color: rgba(255, 217, 160, 0.18);
+}
+
+body.dark-theme .room-name {
+    color: #ffe9c3;
+}
+
+body.dark-theme .room-stat {
+    color: #d6bc97;
+}
+
+.colony-cross-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.08));
+    pointer-events: none;
+    z-index: 0;
+}
+
+.colony-cross-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 12% 16%, rgba(255,255,255,0.08) 0 2px, transparent 3px),
+        radial-gradient(circle at 84% 26%, rgba(255,255,255,0.06) 0 2px, transparent 3px),
+        radial-gradient(circle at 22% 78%, rgba(255,255,255,0.05) 0 2px, transparent 3px),
+        radial-gradient(circle at 74% 74%, rgba(255,255,255,0.04) 0 2px, transparent 3px);
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.colony-surface-label,
+.colony-depth-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: rgba(255, 248, 230, 0.95);
+    background: rgba(61, 31, 16, 0.28);
+    border: 1px solid rgba(255, 233, 186, 0.18);
+    padding: 5px 10px;
+    border-radius: 999px;
+    backdrop-filter: blur(2px);
+}
+
+.colony-room-card {
+    position: absolute;
+}
+
+.colony-room-card::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.06));
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.colony-room-card::after {
+    content: '';
+    position: absolute;
+    inset: auto 16px 10px 16px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(92, 57, 29, 0.12);
+    filter: blur(6px);
+    pointer-events: none;
+}
+
+.room-details,
+.room-visual,
+.room-upgrade-burst {
+    position: relative;
+    z-index: 1;
+}
+
+.room-icon-large {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,248,233,0.18));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 6px 14px rgba(61, 32, 12, 0.12);
+}
+
+.room-level-display {
+    min-width: 56px;
+    box-shadow: 0 6px 14px rgba(74, 144, 226, 0.28);
+}
+
+.room-stat {
+    font-weight: 500;
+}
+
+body.dark-theme .colony-cross-section::before {
+    background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent 18%, transparent 82%, rgba(0,0,0,0.16));
+}
+
+body.dark-theme .colony-surface-label,
+body.dark-theme .colony-depth-label {
+    background: rgba(255, 244, 219, 0.08);
+    border-color: rgba(255, 233, 186, 0.12);
+}
+
+body.dark-theme .colony-room-card::before {
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+}
+
+body.dark-theme .room-icon-large {
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,248,233,0.04));
+}
+
+body.dark-theme .colony-room-card {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+}
+
+body.dark-theme .colony-room-card::after {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .colony-ant,
+    .colony-room-node.level-up,
+    .room-upgrade-burst.show {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .colony-cross-section {
+        min-height: 660px;
+    }
+
+    .colony-surface-label,
+    .colony-depth-label {
+        left: 14px;
+        font-size: 0.62rem;
+    }
+
+    .tunnel-main {
+        left: calc(50% - 22px);
+        width: 44px;
+    }
+
+    .colony-room-chamber {
+        width: calc(100% - 36px);
+        left: 18px !important;
+        right: 18px !important;
+        height: 118px;
+    }
+
+    .chamber-storage { top: 110px; }
+    .chamber-nursery { top: 286px; }
+    .chamber-fungus { top: 462px; }
+
+    .colony-room-node {
+        width: calc(100% - 52px);
+        left: 26px !important;
+        right: 26px !important;
+    }
+
+    .colony-room-node[data-room="storage"] { top: 128px; }
+    .colony-room-node[data-room="nursery"] { top: 304px; }
+    .colony-room-node[data-room="fungus"] { top: 480px; }
+
+    .storage-branch, .lane-storage,
+    .nursery-branch, .lane-nursery,
+    .fungus-branch, .lane-fungus {
+        left: 46%;
+        width: 8%;
+    }
+
+    .storage-branch, .lane-storage { top: 198px; }
+    .nursery-branch, .lane-nursery { top: 374px; }
+    .fungus-branch, .lane-fungus { top: 550px; }
+
+    .colony-ant[data-lane="storage"],
+    .colony-ant[data-lane="nursery"],
+    .colony-ant[data-lane="fungus"] {
+        left: 46%;
+        --ant-travel: 8%;
+    }
+
+    .colony-ant[data-lane="storage"] { top: 188px; }
+    .colony-ant[data-lane="nursery"] { top: 364px; }
+    .colony-ant[data-lane="fungus"] { top: 540px; }
 }
